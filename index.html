@@ -115,49 +115,117 @@ footer p{color:#1a1a1a;font-size:8px;margin-top:3px}
   <div class="logo">LORE<span class="logo-dot">●</span></div>
   <div class="hero-line"></div>
 
-  <!-- Phone mockup — personalized quest log -->
-  <div class="phone" style="margin-bottom:24px">
+  <!-- Interactive phone label -->
+  <div style="margin-bottom:10px;animation:fadeUp .6s ease .4s both;display:flex;align-items:center;gap:6px;justify-content:center">
+    <div style="width:6px;height:6px;border-radius:50%;background:#50D890;animation:pulseR 2s ease infinite"></div>
+    <span style="color:#888;font-size:11px;font-weight:500;letter-spacing:1px">Tap the tabs to preview the app</span>
+  </div>
+
+  <!-- Interactive phone -->
+  <div class="phone" style="margin-bottom:24px" id="interactive-phone">
     <div class="notch"></div>
-    <div class="screen">
+    <div class="screen" id="phone-screen">
+      <!-- Header (always visible) -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding:0 2px">
         <div style="display:flex;align-items:center;gap:1px"><span style="color:#C9A96E;font-size:9px;font-weight:900;font-family:'Cinzel',serif;letter-spacing:2px">LORE</span><span style="color:#FF6B5A;font-size:3px;margin-top:-4px">●</span></div>
         <div style="background:rgba(255,107,90,.08);border-radius:8px;padding:2px 5px"><span style="color:#FF6B5A;font-size:6px;font-weight:600">🔥 6 streak</span></div>
       </div>
-      <div style="margin-bottom:6px"><div style="color:#C9A96E;font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif;margin-bottom:1px">Quest Log</div><div style="color:#E8E0D4;font-size:10px;font-weight:800;font-family:'Cinzel',serif">This Week's Quests</div><div style="color:#555;font-size:5px;margin-top:2px">5 active · 2 completed</div></div>
-      <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">
-        <div style="display:flex;align-items:center;gap:2px;background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.1);border-radius:5px;padding:2px 5px"><span style="font-size:5px">🎯</span><span style="color:#C9A96E;font-size:5.5px;font-weight:600">For Alex</span></div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:5px;padding:2px 5px"><span style="color:#777;font-size:5.5px">📍 Chicago, IL</span></div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:5px;padding:2px 5px"><span style="color:#777;font-size:5.5px">🌧️ 54°F · Rain Thu</span></div>
+
+      <!-- SCREEN: Quests (default) -->
+      <div id="scr-quests">
+        <div style="margin-bottom:6px"><div style="color:#C9A96E;font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif;margin-bottom:1px">Quest Log</div><div style="color:#E8E0D4;font-size:10px;font-weight:800;font-family:'Cinzel',serif">This Week's Quests</div></div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:2px;background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.1);border-radius:5px;padding:2px 5px"><span style="font-size:5px">🎯</span><span style="color:#C9A96E;font-size:5.5px;font-weight:600">For Alex</span></div>
+          <div style="border:1px solid rgba(255,255,255,.05);border-radius:5px;padding:2px 5px"><span style="color:#777;font-size:5.5px">📍 Chicago, IL</span></div>
+          <div style="border:1px solid rgba(255,255,255,.05);border-radius:5px;padding:2px 5px"><span style="color:#777;font-size:5.5px">🌧️ 54°F</span></div>
+        </div>
+        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(80,216,144,.1);border:1px solid rgba(80,216,144,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">🌿</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Ride the L to a random stop and walk 20 min</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 No Explore quest in 11 days</div><div style="display:flex;gap:2px"><span style="background:rgba(80,216,144,.1);color:#50D890;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">EXPLORE</span><span style="color:#444;font-size:5px">🚇 Any L line</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+60</span></div>
+        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(255,107,90,.1);border:1px solid rgba(255,107,90,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">🔥</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Ask a barista their favorite drink and order it</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Social is your weakest stat</div><div style="display:flex;gap:2px"><span style="background:rgba(255,107,90,.1);color:#FF6B5A;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">SOCIAL</span><span style="color:#444;font-size:5px">☕ Near you</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+30</span></div>
+        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(232,184,75,.1);border:1px solid rgba(232,184,75,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">🍳</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Make a meal using only corner store ingredients</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Budget: free — $0 quest</div><div style="display:flex;gap:2px"><span style="background:rgba(232,184,75,.1);color:#E8B84B;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">CULINARY</span><span style="color:#444;font-size:5px">🏠 At home</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+45</span></div>
+        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(91,159,255,.1);border:1px solid rgba(91,159,255,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">📚</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Read the first chapter of 3 random books at a bookstore</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Knowledge stalled at level 4</div><div style="display:flex;gap:2px"><span style="background:rgba(91,159,255,.1);color:#5B9FFF;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">KNOWLEDGE</span><span style="color:#444;font-size:5px">📍 Myopic Books</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+35</span></div>
+        <div style="border:1px solid rgba(80,216,144,.06);border-radius:7px;padding:6px;display:flex;gap:6px;align-items:center;opacity:.45"><div style="width:18px;height:18px;border-radius:5px;background:rgba(80,216,144,.1);display:flex;align-items:center;justify-content:center;font-size:7px;color:#50D890;font-weight:700;flex-shrink:0">✓</div><div style="flex:1"><div style="color:#666;font-size:7px;text-decoration:line-through">Sketch a stranger without them noticing</div><div style="color:#50D890;font-size:5px;font-weight:600;margin-top:1px">+40 XP · 1d ago</div></div></div>
       </div>
-      <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start">
-        <div style="width:18px;height:18px;border-radius:5px;background:rgba(80,216,144,.1);border:1px solid rgba(80,216,144,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:1px">🌿</div>
-        <div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Ride the L to a random stop and walk for 20 minutes</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 No Explore quest in 11 days</div><div style="display:flex;gap:2px"><span style="background:rgba(80,216,144,.1);color:#50D890;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">EXPLORE</span><span style="background:rgba(255,179,71,.1);color:#FFB347;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">Medium</span><span style="color:#444;font-size:5px">🚇 Any L line</span></div></div>
-        <span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+60</span>
+
+      <!-- SCREEN: Character -->
+      <div id="scr-char" style="display:none">
+        <div style="background:linear-gradient(155deg,rgba(201,169,110,.1),rgba(6,6,12,.98) 30%);border-radius:10px;padding:10px 8px;border:1px solid rgba(201,169,110,.08);margin-bottom:6px">
+          <div style="text-align:center;margin-bottom:4px"><span style="color:rgba(201,169,110,.3);font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif">Your Character</span></div>
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+            <div style="width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,rgba(201,169,110,.18),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">A</div>
+            <div style="flex:1"><div style="color:#E8E0D4;font-size:9px;font-weight:700;font-family:'Cinzel',serif">Alex Rivera</div><div style="color:#C9A96E;font-size:5px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Night Owl Explorer</div></div>
+            <div style="text-align:right"><div style="color:#C9A96E;font-size:18px;font-weight:900;font-family:'Cinzel',serif;line-height:1">7</div><div style="color:rgba(201,169,110,.3);font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Level</div></div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border-radius:3px;height:3px"><div style="width:45%;height:100%;border-radius:3px;background:linear-gradient(90deg,#C9A96E55,#C9A96E)"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;align-items:center;gap:5px;background:rgba(255,107,90,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(255,107,90,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🔥</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Social</span><span style="color:#FF6B5A;font-size:8px;font-weight:900;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:30%;height:100%;border-radius:2px;background:#FF6B5A"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:5px;background:rgba(80,216,144,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(80,216,144,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🌿</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Explore</span><span style="color:#50D890;font-size:8px;font-weight:900;font-family:'Cinzel',serif">10</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:55%;height:100%;border-radius:2px;background:#50D890"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:5px;background:rgba(255,179,71,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(255,179,71,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🎨</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Create</span><span style="color:#FFB347;font-size:8px;font-weight:900;font-family:'Cinzel',serif">6</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:72%;height:100%;border-radius:2px;background:#FFB347"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:5px;background:rgba(212,123,255,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(212,123,255,.1);display:flex;align-items:center;justify-content:center;font-size:7px">💪</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Physical</span><span style="color:#D47BFF;font-size:8px;font-weight:900;font-family:'Cinzel',serif">8</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:25%;height:100%;border-radius:2px;background:#D47BFF"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:5px;background:rgba(232,184,75,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(232,184,75,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🍳</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Culinary</span><span style="color:#E8B84B;font-size:8px;font-weight:900;font-family:'Cinzel',serif">5</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:48%;height:100%;border-radius:2px;background:#E8B84B"></div></div></div></div>
+          <div style="display:flex;align-items:center;gap:5px;background:rgba(91,159,255,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(91,159,255,.1);display:flex;align-items:center;justify-content:center;font-size:7px">📚</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Knowledge</span><span style="color:#5B9FFF;font-size:8px;font-weight:900;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:15%;height:100%;border-radius:2px;background:#5B9FFF"></div></div></div></div>
+        </div>
+        <!-- Weekly recap -->
+        <div style="display:flex;gap:4px;margin-top:6px">
+          <div style="flex:1;text-align:center;background:rgba(80,216,144,.05);border-radius:6px;padding:6px 4px"><div style="font-size:7px;margin-bottom:1px">✓</div><div style="color:#50D890;font-size:9px;font-weight:800;font-family:'Cinzel',serif">4</div><div style="color:#444;font-size:4px;text-transform:uppercase;letter-spacing:.5px">Quests</div></div>
+          <div style="flex:1;text-align:center;background:rgba(201,169,110,.05);border-radius:6px;padding:6px 4px"><div style="font-size:7px;margin-bottom:1px">⚡</div><div style="color:#C9A96E;font-size:9px;font-weight:800;font-family:'Cinzel',serif">+210</div><div style="color:#444;font-size:4px;text-transform:uppercase;letter-spacing:.5px">XP</div></div>
+          <div style="flex:1;text-align:center;background:rgba(91,159,255,.05);border-radius:6px;padding:6px 4px"><div style="font-size:7px;margin-bottom:1px">🌿</div><div style="color:#5B9FFF;font-size:9px;font-weight:800;font-family:'Cinzel',serif">Explore</div><div style="color:#444;font-size:4px;text-transform:uppercase;letter-spacing:.5px">Top Stat</div></div>
+        </div>
       </div>
-      <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start">
-        <div style="width:18px;height:18px;border-radius:5px;background:rgba(255,107,90,.1);border:1px solid rgba(255,107,90,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:1px">🔥</div>
-        <div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Ask a barista what their favorite drink is and order it</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Social is your weakest stat</div><div style="display:flex;gap:2px"><span style="background:rgba(255,107,90,.1);color:#FF6B5A;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">SOCIAL</span><span style="background:rgba(80,216,144,.1);color:#50D890;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">Easy</span><span style="color:#444;font-size:5px">☕ Near you</span></div></div>
-        <span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+30</span>
+
+      <!-- SCREEN: Badges -->
+      <div id="scr-badges" style="display:none">
+        <div style="margin-bottom:6px"><div style="color:#C9A96E;font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif;margin-bottom:1px">Achievements</div><div style="color:#E8E0D4;font-size:10px;font-weight:800;font-family:'Cinzel',serif">Your Badges</div><div style="color:#555;font-size:5px;margin-top:2px">5 earned · 3 locked</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px">
+          <div style="background:rgba(107,138,122,.05);border:1px solid rgba(107,138,122,.1);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:16px;margin-bottom:2px">🗺️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Trailblazer</div><div style="color:#6B8A7A;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Common</div></div>
+          <div style="background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.1);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:16px;margin-bottom:2px">👨‍🍳</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Midnight Chef</div><div style="color:#C9A96E;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Rare</div></div>
+          <div style="background:rgba(212,123,255,.05);border:1px solid rgba(212,123,255,.1);border-radius:8px;padding:8px 4px;text-align:center;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,123,255,.03),transparent);background-size:200% 100%;animation:shimmer 4s linear infinite"></div><div style="font-size:16px;margin-bottom:2px;position:relative">⚔️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase;position:relative">Founder</div><div style="color:#D47BFF;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px;position:relative">Legendary</div></div>
+          <div style="background:rgba(107,138,122,.05);border:1px solid rgba(107,138,122,.1);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:16px;margin-bottom:2px">🌅</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Early Riser</div><div style="color:#6B8A7A;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Common</div></div>
+        </div>
+        <div style="color:#555;font-size:5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Locked</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <div style="border:1px solid rgba(255,255,255,.04);border-radius:8px;padding:8px 4px;text-align:center;opacity:.4"><div style="font-size:16px;margin-bottom:2px;filter:grayscale(.8)">💬</div><div style="color:#555;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Conversation Alchemist</div><div style="color:#C9A96E;font-size:4px;font-weight:700;margin-top:2px">🔒 Lvl 4/10</div></div>
+          <div style="border:1px solid rgba(255,255,255,.04);border-radius:8px;padding:8px 4px;text-align:center;opacity:.4"><div style="font-size:16px;margin-bottom:2px;filter:grayscale(.8)">🏛️</div><div style="color:#555;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Renaissance Soul</div><div style="color:#C9A96E;font-size:4px;font-weight:700;margin-top:2px">🔒 2/6 stats</div></div>
+        </div>
       </div>
-      <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start">
-        <div style="width:18px;height:18px;border-radius:5px;background:rgba(232,184,75,.1);border:1px solid rgba(232,184,75,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:1px">🍳</div>
-        <div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Make a full meal using only ingredients from a corner store</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Budget: free — $0 quest</div><div style="display:flex;gap:2px"><span style="background:rgba(232,184,75,.1);color:#E8B84B;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">CULINARY</span><span style="background:rgba(255,179,71,.1);color:#FFB347;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">Medium</span><span style="color:#444;font-size:5px">🏠 At home</span></div></div>
-        <span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+45</span>
+
+      <!-- SCREEN: Share -->
+      <div id="scr-share" style="display:none">
+        <div style="margin-bottom:6px"><div style="color:#C9A96E;font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif;margin-bottom:1px">Built to Share</div><div style="color:#E8E0D4;font-size:10px;font-weight:800;font-family:'Cinzel',serif">Character Card</div></div>
+        <div style="background:linear-gradient(155deg,#0e0e1a,#06060C 40%,#0a0816);border-radius:10px;padding:14px 10px 10px;border:1px solid rgba(201,169,110,.12);position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;width:16px;height:16px;border-top:1px solid rgba(201,169,110,.12);border-left:1px solid rgba(201,169,110,.12);border-radius:10px 0 0 0"></div>
+          <div style="position:absolute;bottom:0;right:0;width:16px;height:16px;border-bottom:1px solid rgba(201,169,110,.12);border-right:1px solid rgba(201,169,110,.12);border-radius:0 0 10px 0"></div>
+          <div style="text-align:center;margin-bottom:8px">
+            <div style="width:32px;height:32px;border-radius:8px;margin:0 auto 4px;background:linear-gradient(135deg,rgba(201,169,110,.15),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">A</div>
+            <div style="color:#E8E0D4;font-size:9px;font-weight:700;font-family:'Cinzel',serif">Alex Rivera</div>
+            <div style="color:#C9A96E;font-size:5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:1px">Night Owl Explorer</div>
+            <div style="color:#C9A96E;font-size:16px;font-weight:900;font-family:'Cinzel',serif;margin-top:3px;line-height:1">7</div>
+            <div style="color:rgba(201,169,110,.3);font-size:4px;text-transform:uppercase;letter-spacing:1.5px">Level</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px">
+            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🔥</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Social</span><span style="color:#FF6B5A;font-size:5px;font-weight:800">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:30%;height:100%;border-radius:1px;background:#FF6B5A"></div></div></div></div>
+            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🌿</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Explore</span><span style="color:#50D890;font-size:5px;font-weight:800">10</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:55%;height:100%;border-radius:1px;background:#50D890"></div></div></div></div>
+            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🎨</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Create</span><span style="color:#FFB347;font-size:5px;font-weight:800">6</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:72%;height:100%;border-radius:1px;background:#FFB347"></div></div></div></div>
+            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">💪</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Physical</span><span style="color:#D47BFF;font-size:5px;font-weight:800">8</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:25%;height:100%;border-radius:1px;background:#D47BFF"></div></div></div></div>
+            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🍳</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Culinary</span><span style="color:#E8B84B;font-size:5px;font-weight:800">5</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:48%;height:100%;border-radius:1px;background:#E8B84B"></div></div></div></div>
+            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">📚</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Knowledge</span><span style="color:#5B9FFF;font-size:5px;font-weight:800">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:15%;height:100%;border-radius:1px;background:#5B9FFF"></div></div></div></div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.03)">
+            <div style="text-align:center"><div style="font-size:10px">🗺️</div><div style="color:#444;font-size:4px;margin-top:1px">Trailblazer</div></div>
+            <div style="text-align:center"><div style="font-size:10px">👨‍🍳</div><div style="color:#444;font-size:4px;margin-top:1px">Midnight Chef</div></div>
+            <div style="text-align:center"><div style="font-size:10px">⚔️</div><div style="color:#444;font-size:4px;margin-top:1px">Founder</div></div>
+          </div>
+          <div style="text-align:center;margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.02);color:rgba(201,169,110,.15);font-size:5px;font-weight:700;font-family:'Cinzel',serif;letter-spacing:3px;text-transform:uppercase">lore</div>
+        </div>
+        <div style="text-align:center;margin-top:6px;color:#555;font-size:5px;line-height:1.4">Share your character card like a Spotify Wrapped. Screenshot-ready.</div>
       </div>
-      <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start">
-        <div style="width:18px;height:18px;border-radius:5px;background:rgba(91,159,255,.1);border:1px solid rgba(91,159,255,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;margin-top:1px">📚</div>
-        <div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Go to a bookstore and read the first chapter of 3 random books</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Knowledge stalled at level 4</div><div style="display:flex;gap:2px"><span style="background:rgba(91,159,255,.1);color:#5B9FFF;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">KNOWLEDGE</span><span style="background:rgba(80,216,144,.1);color:#50D890;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">Easy</span><span style="color:#444;font-size:5px">📍 Myopic Books</span></div></div>
-        <span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+35</span>
-      </div>
-      <div style="border:1px solid rgba(80,216,144,.06);border-radius:7px;padding:6px;margin-bottom:4px;display:flex;gap:6px;align-items:center;opacity:.45">
-        <div style="width:18px;height:18px;border-radius:5px;background:rgba(80,216,144,.1);border:1px solid rgba(80,216,144,.1);display:flex;align-items:center;justify-content:center;font-size:7px;color:#50D890;font-weight:700;flex-shrink:0">✓</div>
-        <div style="flex:1"><div style="color:#666;font-size:7px;text-decoration:line-through">Sketch a stranger without them noticing</div><div style="color:#50D890;font-size:5px;font-weight:600;margin-top:1px">+40 XP · 1d ago</div></div>
-      </div>
+
+      <!-- Tab bar (interactive) -->
       <div style="display:flex;justify-content:space-around;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.04)">
-        <div style="text-align:center;opacity:.3"><div style="font-size:10px">⚔️</div><div style="font-size:4px;color:#444;margin-top:1px">Character</div></div>
-        <div style="text-align:center"><div style="font-size:10px">📜</div><div style="font-size:4px;color:#C9A96E;font-weight:600;margin-top:1px">Quests</div><div style="width:2px;height:2px;border-radius:50%;background:#C9A96E;margin:1px auto 0"></div></div>
-        <div style="text-align:center;opacity:.3"><div style="font-size:10px">🏆</div><div style="font-size:4px;color:#444;margin-top:1px">Badges</div></div>
-        <div style="text-align:center;opacity:.3"><div style="font-size:10px">🃏</div><div style="font-size:4px;color:#444;margin-top:1px">Share</div></div>
+        <div onclick="switchTab('char')" id="tab-char" style="text-align:center;cursor:pointer;opacity:.3;transition:opacity .2s"><div style="font-size:10px">⚔️</div><div style="font-size:4px;color:#444;margin-top:1px">Character</div></div>
+        <div onclick="switchTab('quests')" id="tab-quests" style="text-align:center;cursor:pointer;transition:opacity .2s"><div style="font-size:10px">📜</div><div style="font-size:4px;color:#C9A96E;font-weight:600;margin-top:1px">Quests</div><div style="width:2px;height:2px;border-radius:50%;background:#C9A96E;margin:1px auto 0"></div></div>
+        <div onclick="switchTab('badges')" id="tab-badges" style="text-align:center;cursor:pointer;opacity:.3;transition:opacity .2s"><div style="font-size:10px">🏆</div><div style="font-size:4px;color:#444;margin-top:1px">Badges</div></div>
+        <div onclick="switchTab('share')" id="tab-share" style="text-align:center;cursor:pointer;opacity:.3;transition:opacity .2s"><div style="font-size:10px">🃏</div><div style="font-size:4px;color:#444;margin-top:1px">Share</div></div>
       </div>
     </div>
   </div>
@@ -295,7 +363,7 @@ footer p{color:#1a1a1a;font-size:8px;margin-top:3px}
 <div id="tally-bg" onclick="if(event.target===this){this.style.display='none';document.body.style.overflow=''}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;backdrop-filter:blur(6px)">
   <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:420px;background:#111;border:1px solid rgba(201,169,110,.2);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.7)">
     <div onclick="document.getElementById('tally-bg').style.display='none';document.body.style.overflow=''" style="position:absolute;top:10px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08);color:#aaa;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10">×</div>
-    <iframe src="https://tally.so/r/5B2Zzb?transparentBackground=1&hideTitle=0" width="100%" height="300" frameborder="0" style="display:block"></iframe>
+    <iframe id="tally-frame" src="about:blank" width="100%" height="300" frameborder="0" style="display:block" allow="payment"></iframe>
   </div>
 </div>
 
@@ -304,7 +372,29 @@ var em=document.getElementById('embers');
 for(var i=0;i<10;i++){var e=document.createElement('div');e.style.cssText='position:absolute;border-radius:50%;background:hsl('+(35+Math.random()*10)+','+(55+Math.random()*18)+'%,'+(55+Math.random()*18)+'%);left:'+(12+Math.random()*76)+'%;top:'+(18+Math.random()*55)+'%;width:'+(2+Math.random()*2)+'px;height:'+(2+Math.random()*2)+'px;animation:ember '+(2+Math.random()*3)+'s ease '+(i*.2)+'s infinite;opacity:0';em.appendChild(e)}
 var ct=document.getElementById('counter');var n=847;
 setInterval(function(){if(Math.random()>.7){n++;ct.textContent=n}},5000);
-function openTally(){document.getElementById('tally-bg').style.display='block';document.body.style.overflow='hidden'}
+function openTally(){var f=document.getElementById('tally-frame');if(f.src==='about:blank'||f.src===''){f.src='https://tally.so/r/5B2Zzb?transparentBackground=1&hideTitle=0'}document.getElementById('tally-bg').style.display='block';document.body.style.overflow='hidden'}
+
+// Phone tab switching
+function switchTab(t){
+  var screens=['quests','char','badges','share'];
+  var tabs=['tab-quests','tab-char','tab-badges','tab-share'];
+  screens.forEach(function(s){document.getElementById('scr-'+s).style.display='none'});
+  tabs.forEach(function(tb){var el=document.getElementById(tb);el.style.opacity='.3';el.innerHTML=el.innerHTML.replace(/<div style="width:2px[^<]*<\/div>/,'')});
+  document.getElementById('scr-'+t).style.display='block';
+  var activeTab=document.getElementById('tab-'+t);
+  activeTab.style.opacity='1';
+  // Update tab label color
+  var label=activeTab.querySelectorAll('div')[1];
+  if(label){label.style.color='#C9A96E';label.style.fontWeight='600'}
+  // Add dot
+  var dot=document.createElement('div');
+  dot.style.cssText='width:2px;height:2px;border-radius:50%;background:#C9A96E;margin:1px auto 0';
+  activeTab.appendChild(dot);
+  // Reset other labels
+  tabs.forEach(function(tb){
+    if(tb!=='tab-'+t){var el=document.getElementById(tb);var lbl=el.querySelectorAll('div')[1];if(lbl){lbl.style.color='#444';lbl.style.fontWeight='400'}}
+  });
+}
 </script>
 </body>
 </html>
