@@ -22,16 +22,29 @@ html,body{background:#06060C;color:#E8E0D4;font-family:'DM Sans',sans-serif;-web
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
 /* ═══ HERO ═══ */
-.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:40px 20px;text-align:center}
+.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:28px 20px;text-align:center}
 .hero-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(201,169,110,.06) 0%,transparent 45%);animation:glow 5s ease-in-out infinite;pointer-events:none}
 .embers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.logo{font-family:'Cinzel',serif;font-size:clamp(48px,10vw,80px);font-weight:900;color:#C9A96E;letter-spacing:12px;text-transform:uppercase;animation:logoIn 1.5s cubic-bezier(.16,1,.3,1) .05s both;text-shadow:0 0 80px rgba(201,169,110,.1);position:relative;display:inline-block}
-.logo-dot{color:#FF6B5A;font-size:10px;position:absolute;top:10px;right:-12px;animation:dotP 2s ease 1.6s infinite}
-.hero-line{width:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.4),transparent);margin:20px auto;animation:barFill 1.2s ease .4s forwards;--bw:130px}
-.hero-h1{font-family:'Cinzel',serif;font-size:clamp(12px,2.2vw,16px);font-weight:700;letter-spacing:4px;text-transform:uppercase;line-height:1.5;animation:fadeUp .6s ease .6s both}
+.logo{font-family:'Cinzel',serif;font-size:clamp(42px,9vw,72px);font-weight:900;color:#C9A96E;letter-spacing:12px;text-transform:uppercase;animation:logoIn 1.5s cubic-bezier(.16,1,.3,1) .05s both;text-shadow:0 0 80px rgba(201,169,110,.1);position:relative;display:inline-block}
+.logo-dot{color:#FF6B5A;font-size:10px;position:absolute;top:8px;right:-12px;animation:dotP 2s ease 1.6s infinite}
+.hero-line{width:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.4),transparent);margin:16px auto;animation:barFill 1.2s ease .4s forwards;--bw:120px}
+.hero-h1{font-family:'Cinzel',serif;font-size:clamp(11px,2vw,15px);font-weight:700;letter-spacing:3px;text-transform:uppercase;line-height:1.5;animation:fadeUp .6s ease .6s both}
 .hero-h1 em{color:#C9A96E;font-style:normal}
-.hero-sub{max-width:420px;font-size:13px;line-height:1.7;color:#888;margin-top:10px;animation:fadeUp .6s ease .8s both}
+.hero-sub{max-width:400px;font-size:13px;line-height:1.65;color:#888;margin-top:8px;animation:fadeUp .6s ease .8s both}
 .hero-sub strong{color:#C9A96E;font-weight:600}
+
+/* Hero split layout */
+.hero-split{display:flex;align-items:center;gap:36px;margin-top:20px;width:100%;max-width:820px;animation:fadeUp .6s ease .9s both}
+.hero-left{flex:1;text-align:left;min-width:0}
+.hero-right{flex:0 0 280px}
+@media(max-width:720px){
+  .hero-split{flex-direction:column;gap:20px}
+  .hero-left{text-align:center}
+  .hero-left .social-proof{justify-content:center !important}
+  .hero-left .micro{justify-content:center !important}
+  .hero-left .join-btn{margin:0 auto}
+  .hero-right{flex:none;width:100%;max-width:260px}
+}
 
 /* Join button */
 .join-btn{padding:15px 32px;border-radius:14px;background:linear-gradient(135deg,#C9A96E,#A8894A);color:#06060C;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;letter-spacing:.5px;cursor:pointer;transition:transform .15s,box-shadow .15s;animation:ctaGlow 4s ease 2s infinite}
@@ -69,9 +82,11 @@ html,body{background:#06060C;color:#E8E0D4;font-family:'DM Sans',sans-serif;-web
 .badge-note{display:inline-flex;align-items:center;gap:6px;background:rgba(212,123,255,.06);border:1px solid rgba(212,123,255,.1);border-radius:10px;padding:7px 12px;font-size:9px;color:#D47BFF;font-weight:600;margin-top:12px}
 
 /* Phone mockup */
-.phone{max-width:260px;width:100%;background:#000;border-radius:30px;padding:9px;border:2px solid rgba(255,255,255,.06);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 24px rgba(201,169,110,.03);margin:0 auto}
+.phone{max-width:260px;width:260px;background:#000;border-radius:30px;padding:9px;border:2px solid rgba(255,255,255,.06);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 24px rgba(201,169,110,.03);margin:0 auto}
 .notch{width:70px;height:16px;background:#000;border-radius:0 0 10px 10px;margin:0 auto}
-.screen{background:#06060C;border-radius:22px;padding:12px 10px 14px;overflow:hidden}
+.screen{background:#06060C;border-radius:22px;padding:12px 10px 14px;overflow:hidden;height:420px;overflow-y:auto}
+.screen::-webkit-scrollbar{display:none}
+.screen{-ms-overflow-style:none;scrollbar-width:none}
 
 /* Quest cards for graphic section */
 .quest-g{border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:12px;margin-bottom:8px;display:flex;gap:9px;align-items:flex-start}
@@ -114,12 +129,25 @@ footer p{color:#1a1a1a;font-size:8px;margin-top:3px}
   <div class="embers" id="embers"></div>
   <div class="logo">LORE<span class="logo-dot">●</span></div>
   <div class="hero-line"></div>
+  <h1 class="hero-h1">Personalized Quests Built Around <em>Your Life</em></h1>
+  <p class="hero-sub">Weekly side quests based on <strong>your city</strong>, <strong>your stats</strong>, and <strong>your weak spots</strong>. Not a to-do list. An RPG for the life you're already living.</p>
 
-  <!-- Interactive phone label -->
-  <div style="margin-bottom:10px;animation:fadeUp .6s ease .4s both;display:flex;align-items:center;gap:6px;justify-content:center">
-    <div style="width:6px;height:6px;border-radius:50%;background:#50D890;animation:pulseR 2s ease infinite"></div>
-    <span style="color:#888;font-size:11px;font-weight:500;letter-spacing:1px">Tap the tabs to preview the app</span>
-  </div>
+  <!-- Split: CTA left, Phone right -->
+  <div class="hero-split">
+    <div class="hero-left">
+      <div class="social-proof" style="justify-content:flex-start">
+        <div class="avatars"><div class="av">M</div><div class="av">K</div><div class="av">J</div></div>
+        <span class="proof-t"><span class="live-dot"></span><strong id="counter">847</strong> on the waitlist</span>
+      </div>
+      <button class="join-btn" onclick="openTally()" style="width:100%;max-width:320px">Join Waitlist ⚔️</button>
+      <div class="micro" style="justify-content:flex-start"><span><span class="ck">✓</span> Free</span><span><span class="ck">✓</span> No spam</span><span><span class="ck">✓</span> iOS & Android</span></div>
+      <div class="badge-note" style="margin-top:12px">⚔️ First 1,000 get a Founder Badge</div>
+    </div>
+    <div class="hero-right">
+      <div style="margin-bottom:6px;display:flex;align-items:center;gap:5px;justify-content:center">
+        <div style="width:5px;height:5px;border-radius:50%;background:#50D890;animation:pulseR 2s ease infinite"></div>
+        <span style="color:#666;font-size:9px;font-weight:500;letter-spacing:.5px">Interactive demo · More features coming soon</span>
+      </div>
 
   <!-- Interactive phone -->
   <div class="phone" style="margin-bottom:24px" id="interactive-phone">
@@ -230,44 +258,29 @@ footer p{color:#1a1a1a;font-size:8px;margin-top:3px}
     </div>
   </div>
 
-  <h1 class="hero-h1">Personalized Quests Built Around <em>Your Life</em></h1>
-  <p class="hero-sub">Weekly side quests based on <strong>your city</strong>, <strong>your stats</strong>, and <strong>your weak spots</strong>. Not a to-do list. An RPG for the life you're already living.</p>
-  <div class="join-wrap">
-    <div class="social-proof">
-      <div class="avatars"><div class="av">M</div><div class="av">K</div><div class="av">J</div></div>
-      <span class="proof-t"><span class="live-dot"></span><strong id="counter">847</strong> on the waitlist</span>
-    </div>
-    <button class="join-btn" onclick="openTally()">Join Waitlist ⚔️</button>
-    <div class="micro"><span><span class="ck">✓</span> Free</span><span><span class="ck">✓</span> No spam</span><span><span class="ck">✓</span> iOS & Android</span></div>
-  </div>
+  </div><!-- close hero-right -->
+  </div><!-- close hero-split -->
 </section>
 
-<!-- ═══ ROW 1: Phone mockup + Character sheet copy ═══ -->
+<!-- ═══ ROW 1: Character stats graphic + copy ═══ -->
 <div class="row">
   <div class="row-graphic">
-    <div class="phone">
-      <div class="notch"></div>
-      <div class="screen">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding:0 2px">
-          <div style="display:flex;align-items:center;gap:1px"><span style="color:#C9A96E;font-size:9px;font-weight:900;font-family:'Cinzel',serif;letter-spacing:2px">LORE</span><span style="color:#FF6B5A;font-size:3px;margin-top:-4px">●</span></div>
-          <div style="background:rgba(255,107,90,.08);border-radius:8px;padding:2px 5px"><span style="color:#FF6B5A;font-size:6px;font-weight:600">🔥 6 streak</span></div>
-        </div>
-        <div style="background:linear-gradient(155deg,rgba(201,169,110,.1),rgba(6,6,12,.98) 30%);border-radius:10px;padding:10px 8px;border:1px solid rgba(201,169,110,.08);margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
-            <div style="width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,rgba(201,169,110,.18),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">D</div>
-            <div style="flex:1"><div style="color:#E8E0D4;font-size:9px;font-weight:700;font-family:'Cinzel',serif">Damien Smith</div><div style="color:#C9A96E;font-size:5px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Urban Pathfinder</div></div>
-            <div style="text-align:right"><div style="color:#C9A96E;font-size:18px;font-weight:900;font-family:'Cinzel',serif;line-height:1">5</div><div style="color:rgba(201,169,110,.3);font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Level</div></div>
-          </div>
-          <div style="background:rgba(255,255,255,.05);border-radius:3px;height:3px"><div style="width:68%;height:100%;border-radius:3px;background:linear-gradient(90deg,#C9A96E55,#C9A96E)"></div></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(255,107,90,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(255,107,90,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🔥</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Social</span><span style="color:#FF6B5A;font-size:8px;font-weight:900;font-family:'Cinzel',serif">5</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:20%;height:100%;border-radius:2px;background:#FF6B5A"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(80,216,144,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(80,216,144,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🌿</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Explore</span><span style="color:#50D890;font-size:8px;font-weight:900;font-family:'Cinzel',serif">8</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:40%;height:100%;border-radius:2px;background:#50D890"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(255,179,71,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(255,179,71,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🎨</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Create</span><span style="color:#FFB347;font-size:8px;font-weight:900;font-family:'Cinzel',serif">3</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:57%;height:100%;border-radius:2px;background:#FFB347"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(212,123,255,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(212,123,255,.1);display:flex;align-items:center;justify-content:center;font-size:7px">💪</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Physical</span><span style="color:#D47BFF;font-size:8px;font-weight:900;font-family:'Cinzel',serif">6</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:37%;height:100%;border-radius:2px;background:#D47BFF"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(232,184,75,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(232,184,75,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🍳</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Culinary</span><span style="color:#E8B84B;font-size:8px;font-weight:900;font-family:'Cinzel',serif">7</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:10%;height:100%;border-radius:2px;background:#E8B84B"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(91,159,255,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(91,159,255,.1);display:flex;align-items:center;justify-content:center;font-size:7px">📚</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Knowledge</span><span style="color:#5B9FFF;font-size:8px;font-weight:900;font-family:'Cinzel',serif">5</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:60%;height:100%;border-radius:2px;background:#5B9FFF"></div></div></div></div>
-        </div>
+    <!-- Stat radar / character card graphic -->
+    <div style="max-width:280px;margin:0 auto;background:linear-gradient(155deg,#0e0e1a,#06060C 40%);border-radius:18px;padding:18px 14px;border:1px solid rgba(201,169,110,.12);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;width:24px;height:24px;border-top:1.5px solid rgba(201,169,110,.12);border-left:1.5px solid rgba(201,169,110,.12);border-radius:18px 0 0 0"></div>
+      <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;border-bottom:1.5px solid rgba(201,169,110,.12);border-right:1.5px solid rgba(201,169,110,.12);border-radius:0 0 18px 0"></div>
+      <div style="text-align:center;margin-bottom:10px">
+        <div style="width:40px;height:40px;border-radius:10px;margin:0 auto 5px;background:linear-gradient(135deg,rgba(201,169,110,.15),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">A</div>
+        <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:#E8E0D4">Alex Rivera</div>
+        <div style="color:#C9A96E;font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px">Night Owl Explorer · Level 7</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🔥</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Social</span><span style="color:#FF6B5A;font-size:8px;font-weight:800;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:30%;height:100%;border-radius:2px;background:#FF6B5A;box-shadow:0 0 4px rgba(255,107,90,.3)"></div></div></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🌿</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Explore</span><span style="color:#50D890;font-size:8px;font-weight:800;font-family:'Cinzel',serif">10</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:55%;height:100%;border-radius:2px;background:#50D890;box-shadow:0 0 4px rgba(80,216,144,.3)"></div></div></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🎨</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Create</span><span style="color:#FFB347;font-size:8px;font-weight:800;font-family:'Cinzel',serif">6</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:72%;height:100%;border-radius:2px;background:#FFB347;box-shadow:0 0 4px rgba(255,179,71,.3)"></div></div></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">💪</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Physical</span><span style="color:#D47BFF;font-size:8px;font-weight:800;font-family:'Cinzel',serif">8</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:25%;height:100%;border-radius:2px;background:#D47BFF;box-shadow:0 0 4px rgba(212,123,255,.3)"></div></div></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🍳</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Culinary</span><span style="color:#E8B84B;font-size:8px;font-weight:800;font-family:'Cinzel',serif">5</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:48%;height:100%;border-radius:2px;background:#E8B84B;box-shadow:0 0 4px rgba(232,184,75,.3)"></div></div></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">📚</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Knowledge</span><span style="color:#5B9FFF;font-size:8px;font-weight:800;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:15%;height:100%;border-radius:2px;background:#5B9FFF;box-shadow:0 0 4px rgba(91,159,255,.3)"></div></div></div></div>
       </div>
     </div>
   </div>
@@ -275,75 +288,57 @@ footer p{color:#1a1a1a;font-size:8px;margin-top:3px}
     <div class="s-label">Your Character Sheet</div>
     <div class="s-title">6 Stats. One <em>You</em>.</div>
     <div class="s-sub">Track Social, Explore, Create, Physical, Culinary, and Knowledge. Every quest you complete levels up the stat that matters. Your weakest stat gets the most quests.</div>
-    <button class="join-btn" onclick="openTally()">Join Waitlist ⚔️</button>
-    <div class="badge-note">⚔️ First 1,000 get a Founder Badge</div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ═══ ROW 2: Quest cards + Personalized copy (reversed) ═══ -->
+<!-- ═══ ROW 2: Quest cards graphic + copy (reversed) ═══ -->
 <div class="row row-reverse">
   <div class="row-graphic">
-    <div style="max-width:320px;margin:0 auto">
-      <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:10px">
-        <div style="display:flex;align-items:center;gap:4px;background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.1);border-radius:8px;padding:4px 9px"><span style="font-size:9px">🎯</span><span style="color:#C9A96E;font-size:9px;font-weight:600">Personalized for Damien</span></div>
-        <div style="display:flex;align-items:center;gap:3px;border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:4px 9px"><span style="color:#777;font-size:9px">📍 Phoenix, AZ</span></div>
-        <div style="display:flex;align-items:center;gap:3px;border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:4px 9px"><span style="color:#777;font-size:9px">☀️ 78°F</span></div>
+    <div style="max-width:300px;margin:0 auto">
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:3px;background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.1);border-radius:6px;padding:3px 7px"><span style="font-size:7px">🎯</span><span style="color:#C9A96E;font-size:7px;font-weight:600">For Damien</span></div>
+        <div style="border:1px solid rgba(255,255,255,.05);border-radius:6px;padding:3px 7px"><span style="color:#777;font-size:7px">📍 Phoenix, AZ</span></div>
+        <div style="border:1px solid rgba(255,255,255,.05);border-radius:6px;padding:3px 7px"><span style="color:#777;font-size:7px">☀️ 78°F</span></div>
       </div>
-      <div class="quest-g">
-        <div class="quest-g-icon" style="background:rgba(255,107,90,.1);border:1.5px solid rgba(255,107,90,.15)">🔥</div>
-        <div style="flex:1"><div class="quest-g-title">Have a 30-min conversation with a stranger</div><div class="quest-g-why">🎯 Your Social is your lowest stat</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(255,107,90,.1);color:#FF6B5A">Social</span><span class="quest-g-tag" style="background:rgba(255,107,90,.1);color:#FF6B5A">Hard</span><span style="color:#444;font-size:7px">📍 Local coffee shops</span></div></div>
-        <span class="quest-g-xp">+80</span>
-      </div>
-      <div class="quest-g">
-        <div class="quest-g-icon" style="background:rgba(80,216,144,.1);border:1.5px solid rgba(80,216,144,.15)">🌿</div>
-        <div style="flex:1"><div class="quest-g-title">Visit a neighborhood you've never explored</div><div class="quest-g-why">🎯 No Explore quest in 8 days</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(80,216,144,.1);color:#50D890">Explore</span><span class="quest-g-tag" style="background:rgba(255,179,71,.1);color:#FFB347">Medium</span><span style="color:#444;font-size:7px">📍 Roosevelt Row — 12 min</span></div></div>
-        <span class="quest-g-xp">+55</span>
-      </div>
-      <div class="quest-g">
-        <div class="quest-g-icon" style="background:rgba(212,123,255,.1);border:1.5px solid rgba(212,123,255,.15)">💪</div>
-        <div style="flex:1"><div class="quest-g-title">Run 1 mile faster than your last time</div><div class="quest-g-why">🎯 Chain 3/5 — unlock Speed Demon</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(212,123,255,.1);color:#D47BFF">Physical</span><span class="quest-g-tag" style="background:rgba(255,179,71,.1);color:#FFB347">Medium</span><span style="color:#444;font-size:7px">☀️ Good running weather</span></div></div>
-        <span class="quest-g-xp">+50</span>
-      </div>
+      <div class="quest-g"><div class="quest-g-icon" style="background:rgba(255,107,90,.1);border:1.5px solid rgba(255,107,90,.15)">🔥</div><div style="flex:1"><div class="quest-g-title">Have a 30-min conversation with a stranger</div><div class="quest-g-why">🎯 Your Social is your lowest stat</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(255,107,90,.1);color:#FF6B5A">Social</span><span class="quest-g-tag" style="background:rgba(255,107,90,.1);color:#FF6B5A">Hard</span><span style="color:#444;font-size:7px">📍 Coffee shops</span></div></div><span class="quest-g-xp">+80</span></div>
+      <div class="quest-g"><div class="quest-g-icon" style="background:rgba(80,216,144,.1);border:1.5px solid rgba(80,216,144,.15)">🌿</div><div style="flex:1"><div class="quest-g-title">Visit a neighborhood you've never explored</div><div class="quest-g-why">🎯 No Explore quest in 8 days</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(80,216,144,.1);color:#50D890">Explore</span><span class="quest-g-tag" style="background:rgba(255,179,71,.1);color:#FFB347">Medium</span><span style="color:#444;font-size:7px">📍 Roosevelt Row</span></div></div><span class="quest-g-xp">+55</span></div>
+      <div class="quest-g"><div class="quest-g-icon" style="background:rgba(212,123,255,.1);border:1.5px solid rgba(212,123,255,.15)">💪</div><div style="flex:1"><div class="quest-g-title">Run 1 mile faster than your last time</div><div class="quest-g-why">🎯 Chain 3/5 — unlock Speed Demon</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(212,123,255,.1);color:#D47BFF">Physical</span><span class="quest-g-tag" style="background:rgba(255,179,71,.1);color:#FFB347">Medium</span><span style="color:#444;font-size:7px">☀️ Good weather</span></div></div><span class="quest-g-xp">+50</span></div>
     </div>
   </div>
   <div class="row-text">
     <div class="s-label">Quest Log</div>
     <div class="s-title">Quests That Know <em>Your Life</em></div>
     <div class="s-sub">Every quest adapts to your city, weather, budget, and the stats you need to level up. A night owl in Phoenix gets different quests than a morning person in Portland.</div>
-    <button class="join-btn" onclick="openTally()">Join Waitlist ⚔️</button>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- ═══ ROW 3: Badges + Share card ═══ -->
+<!-- ═══ ROW 3: Share card + badges graphic + copy ═══ -->
 <div class="row">
   <div class="row-graphic">
-    <div class="share-card">
-      <div class="sc-corner-tl"></div><div class="sc-corner-br"></div>
-      <div style="text-align:center;margin-bottom:14px">
-        <div style="width:48px;height:48px;border-radius:12px;margin:0 auto 6px;background:linear-gradient(135deg,rgba(201,169,110,.18),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.25);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">D</div>
-        <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700">Damien Smith</div>
-        <div style="color:#C9A96E;font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin-top:1px">Urban Pathfinder</div>
-        <div style="color:#C9A96E;font-size:28px;font-weight:900;font-family:'Cinzel',serif;margin-top:4px;line-height:1">5</div>
-        <div style="color:rgba(201,169,110,.3);font-size:6px;text-transform:uppercase;letter-spacing:2px">Level</div>
+    <div style="max-width:280px;margin:0 auto;background:linear-gradient(155deg,#0e0e1a,#06060C 40%);border-radius:18px;padding:18px 14px;border:1px solid rgba(201,169,110,.12);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;width:24px;height:24px;border-top:1.5px solid rgba(201,169,110,.12);border-left:1.5px solid rgba(201,169,110,.12);border-radius:18px 0 0 0"></div>
+      <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;border-bottom:1.5px solid rgba(201,169,110,.12);border-right:1.5px solid rgba(201,169,110,.12);border-radius:0 0 18px 0"></div>
+      <div style="text-align:center;margin-bottom:10px">
+        <div style="width:40px;height:40px;border-radius:10px;margin:0 auto 5px;background:linear-gradient(135deg,rgba(201,169,110,.15),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">D</div>
+        <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:#E8E0D4">Damien Smith</div>
+        <div style="color:#C9A96E;font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px">Urban Pathfinder · Level 5</div>
       </div>
-      <!-- Mini badges -->
-      <div style="display:flex;justify-content:center;gap:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.04)">
-        <div style="text-align:center"><div style="font-size:16px">🗺️</div><div style="color:#444;font-size:5px;text-transform:uppercase;margin-top:1px">Trailblazer</div></div>
-        <div style="text-align:center"><div style="font-size:16px">👨‍🍳</div><div style="color:#444;font-size:5px;text-transform:uppercase;margin-top:1px">Midnight Chef</div></div>
-        <div style="text-align:center"><div style="font-size:16px">⚔️</div><div style="color:#444;font-size:5px;text-transform:uppercase;margin-top:1px">Founder</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">
+        <div style="text-align:center;background:rgba(107,138,122,.05);border:1px solid rgba(107,138,122,.08);border-radius:8px;padding:8px 4px"><div style="font-size:18px;margin-bottom:2px">🗺️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700">Trailblazer</div><div style="color:#6B8A7A;font-size:4px;font-weight:600;margin-top:1px">COMMON</div></div>
+        <div style="text-align:center;background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.1);border-radius:8px;padding:8px 4px"><div style="font-size:18px;margin-bottom:2px">👨‍🍳</div><div style="color:#E8E0D4;font-size:6px;font-weight:700">Midnight Chef</div><div style="color:#C9A96E;font-size:4px;font-weight:600;margin-top:1px">RARE</div></div>
+        <div style="text-align:center;background:rgba(212,123,255,.05);border:1px solid rgba(212,123,255,.1);border-radius:8px;padding:8px 4px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,123,255,.04),transparent);background-size:200% 100%;animation:shimmer 4s linear infinite"></div><div style="font-size:18px;margin-bottom:2px;position:relative">⚔️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;position:relative">Founder</div><div style="color:#D47BFF;font-size:4px;font-weight:600;margin-top:1px;position:relative">LEGENDARY</div></div>
       </div>
-      <div style="text-align:center;margin-top:8px;padding-top:5px;border-top:1px solid rgba(255,255,255,.02);color:rgba(201,169,110,.15);font-size:6px;font-weight:700;font-family:'Cinzel',serif;letter-spacing:3px;text-transform:uppercase">lore</div>
+      <div style="text-align:center;color:rgba(201,169,110,.15);font-size:6px;font-weight:700;font-family:'Cinzel',serif;letter-spacing:3px;text-transform:uppercase;padding-top:6px;border-top:1px solid rgba(255,255,255,.03)">lore</div>
     </div>
   </div>
   <div class="row-text">
     <div class="s-label">Built to Share</div>
     <div class="s-title">More Than Your Routine.<br>This Is <em>Who You Are</em>.</div>
     <div class="s-sub">Share your character card like a Spotify Wrapped. Unlock rare badges like Midnight Chef, Conversation Alchemist, and Urban Cartographer. Flexes that mean something.</div>
-    <button class="join-btn" onclick="openTally()">Join Waitlist ⚔️</button>
   </div>
 </div>
 
