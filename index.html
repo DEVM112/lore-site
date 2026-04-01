@@ -167,49 +167,11 @@
 
   /* ── Form ── */
   .form-wrap { max-width: 480px; margin: 0 auto; }
-  .form-row {
-    display: flex;
-    border-radius: 12px; overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    animation: glowPulse 4s ease-in-out infinite;
-  }
-  .form-row input {
-    flex: 1; padding: 16px 20px;
-    font-size: 15px; font-family: var(--font-body);
-    background: transparent; border: none;
-    color: var(--text); min-width: 0;
-    outline: none;
-  }
-  .form-row input::placeholder { color: var(--text-muted); }
-  .form-row input:focus { box-shadow: none; }
-  .cta-btn {
-    padding: 16px 28px;
-    font-family: var(--font-display);
-    font-size: 13px; font-weight: 600;
-    letter-spacing: 0.5px;
-    background: linear-gradient(135deg, var(--gold), #B8963F);
-    color: var(--bg); border: none;
-    cursor: pointer; white-space: nowrap;
-    transition: all 0.2s;
-  }
-  .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.3); }
-  .cta-btn:active { transform: translateY(0); }
   .form-note {
     margin-top: 14px;
     font-size: 13px; color: var(--text-muted); font-weight: 300;
     text-align: center;
   }
-
-  /* ── Success ── */
-  .success { text-align: center; padding: 24px 0; display: none; }
-  .success.show { display: block; animation: fadeUp 0.6s ease-out; }
-  .success h3 {
-    font-family: var(--font-display);
-    font-size: 22px; font-weight: 600;
-    color: var(--gold); margin: 16px 0 8px;
-  }
-  .success p { font-size: 16px; color: var(--text-dim); font-weight: 300; }
 
   /* ── Sections ── */
   .section {
@@ -412,20 +374,7 @@
     </p>
 
     <div id="waitlist" class="form-wrap fade-up fade-up-d3">
-      <div class="form-row" id="formRow">
-        <input type="email" id="emailInput" placeholder="Enter your email to join the quest">
-        <button class="cta-btn" id="submitBtn" onclick="handleSubmit()">Accept the Quest</button>
-      </div>
-      <p class="form-note" id="formNote">No spam, only quests</p>
-
-      <div class="success" id="successMsg">
-        <svg width="32" height="32" viewBox="0 0 32 32">
-          <circle cx="16" cy="16" r="14" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
-          <path d="M10 16L14 20L22 12" stroke="#C9A84C" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <h3>You're in.</h3>
-        <p>You're on the list. Watch your inbox for your first quest briefing.</p>
-      </div>
+      <iframe data-tally-src="https://tally.so/embed/wMqOGx?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="150" frameborder="0" marginheight="0" marginwidth="0" title="Lore Waitlist"></iframe>
     </div>
   </div>
 </section>
@@ -517,14 +466,8 @@
   <h2 class="final-heading">Ready to make life less boring?</h2>
   <p class="final-sub">Join the waitlist and be first in line when Lore launches.</p>
   <div class="form-wrap">
-    <div class="form-row" id="formRow2">
-      <input type="email" id="emailInput2" placeholder="Your email address">
-      <button class="cta-btn" onclick="handleSubmit2()">Join the Waitlist</button>
-    </div>
+    <iframe data-tally-src="https://tally.so/embed/wMqOGx?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="150" frameborder="0" marginheight="0" marginwidth="0" title="Lore Waitlist"></iframe>
   </div>
-  <p class="form-note" id="alreadyIn" style="display:none; color: #C9A84C; font-size: 18px; margin-top: 16px;">
-    You're already on the list. We'll be in touch soon.
-  </p>
 </section>
 
 <footer class="footer">
@@ -553,72 +496,10 @@
   }, { threshold: 0.12 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // ── Tally Form Submission ──
-  // Your Tally form ID - update this if it changes
-  const TALLY_FORM_ID = 'wMqOGx';
-
-  async function submitToTally(email) {
-    try {
-      const res = await fetch(`https://tally.so/r/${TALLY_FORM_ID}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ email: email }),
-        mode: 'no-cors' // Tally doesn't support CORS from custom domains
-      });
-      // With no-cors we can't read the response, but the submission goes through
-      return true;
-    } catch (err) {
-      console.error('Tally submission error:', err);
-      // Fallback: open Tally form directly with email pre-filled
-      window.open(`https://tally.so/r/${TALLY_FORM_ID}?email=${encodeURIComponent(email)}`, '_blank');
-      return true;
-    }
-  }
-
-  function showSuccess() {
-    // Update hero form
-    document.getElementById('formRow').style.display = 'none';
-    document.getElementById('formNote').style.display = 'none';
-    document.getElementById('successMsg').classList.add('show');
-    // Update bottom form
-    document.getElementById('formRow2').style.display = 'none';
-    document.getElementById('alreadyIn').style.display = 'block';
-  }
-
-  // Form submission - hero
-  async function handleSubmit() {
-    const input = document.getElementById('emailInput');
-    const email = input.value.trim();
-    if (!email || !email.includes('@') || !email.includes('.')) return;
-
-    const btn = document.getElementById('submitBtn');
-    btn.textContent = 'Enrolling...';
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-
-    await submitToTally(email);
-    showSuccess();
-  }
-
-  // Form submission - bottom
-  async function handleSubmit2() {
-    const input = document.getElementById('emailInput2');
-    const email = input.value.trim();
-    if (!email || !email.includes('@') || !email.includes('.')) return;
-
-    await submitToTally(email);
-    showSuccess();
-  }
-
-  // Enter key support
-  document.getElementById('emailInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSubmit();
-  });
-  document.getElementById('emailInput2').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSubmit2();
-  });
 </script>
+
+<!-- Tally embed widget loader -->
+<script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
 
 </body>
 </html>
