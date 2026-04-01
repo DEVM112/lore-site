@@ -1,395 +1,899 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Lore — Turn Your Real Life Into an RPG</title>
-<meta name="description" content="Personalized side quests built around your life. An RPG for the life you're already living.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#06060C;color:#E8E0D4;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-@keyframes logoIn{0%{opacity:0;transform:scale(.55);filter:blur(14px)}55%{opacity:1;transform:scale(1.04);filter:blur(0)}100%{transform:scale(1)}}
-@keyframes barFill{from{width:0}to{width:var(--bw)}}
-@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(201,169,110,.06)}50%{box-shadow:0 0 50px rgba(201,169,110,.18)}}
-@keyframes dotP{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.4)}}
-@keyframes ember{0%{opacity:0;transform:translateY(0) scale(0)}10%{opacity:.4;transform:translateY(-12px) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(.1)}}
-@keyframes pulseR{0%{box-shadow:0 0 0 0 rgba(80,216,144,.3)}100%{box-shadow:0 0 0 10px rgba(80,216,144,0)}}
-@keyframes ctaGlow{0%,100%{box-shadow:0 4px 18px rgba(201,169,110,.18)}50%{box-shadow:0 8px 32px rgba(201,169,110,.3)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+import { useState, useEffect, useRef } from "react";
 
-/* ═══ HERO ═══ */
-.hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:28px 20px;text-align:center}
-.hero-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(201,169,110,.06) 0%,transparent 45%);animation:glow 5s ease-in-out infinite;pointer-events:none}
-.embers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.logo{font-family:'Cinzel',serif;font-size:clamp(42px,9vw,72px);font-weight:900;color:#C9A96E;letter-spacing:12px;text-transform:uppercase;animation:logoIn 1.5s cubic-bezier(.16,1,.3,1) .05s both;text-shadow:0 0 80px rgba(201,169,110,.1);position:relative;display:inline-block}
-.logo-dot{color:#FF6B5A;font-size:10px;position:absolute;top:8px;right:-12px;animation:dotP 2s ease 1.6s infinite}
-.hero-line{width:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.4),transparent);margin:16px auto;animation:barFill 1.2s ease .4s forwards;--bw:120px}
-.hero-h1{font-family:'Cinzel',serif;font-size:clamp(11px,2vw,15px);font-weight:700;letter-spacing:3px;text-transform:uppercase;line-height:1.5;animation:fadeUp .6s ease .6s both}
-.hero-h1 em{color:#C9A96E;font-style:normal}
-.hero-sub{max-width:400px;font-size:13px;line-height:1.65;color:#888;margin-top:8px;animation:fadeUp .6s ease .8s both}
-.hero-sub strong{color:#C9A96E;font-weight:600}
+const TALLY_FORM_ID = "wMqOGx"; // Replace with your actual Tally form ID
 
-/* Hero split layout */
-.hero-split{display:flex;align-items:center;gap:36px;margin-top:20px;width:100%;max-width:820px;animation:fadeUp .6s ease .9s both}
-.hero-left{flex:1;text-align:left;min-width:0}
-.hero-right{flex:0 0 280px}
-@media(max-width:720px){
-  .hero-split{flex-direction:column;gap:20px}
-  .hero-left{text-align:center}
-  .hero-left .social-proof{justify-content:center !important}
-  .hero-left .micro{justify-content:center !important}
-  .hero-left .join-btn{margin:0 auto}
-  .hero-right{flex:none;width:100%;max-width:260px}
+export default function LoreLanding() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [waitlistCount, setWaitlistCount] = useState(847);
+  const [visibleSections, setVisibleSections] = useState(new Set(["hero"]));
+  const sectionRefs = useRef({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set([...prev, entry.target.dataset.section]));
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    Object.values(sectionRefs.current).forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleSubmit = () => {
+    if (!email || !email.includes("@")) return;
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setSubmitted(true);
+      setIsSubmitting(false);
+      setWaitlistCount((c) => c + 1);
+    }, 1200);
+  };
+
+  const isVisible = (id) => visibleSections.has(id);
+
+  return (
+    <div style={styles.page}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes glowPulse {
+          0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.15), 0 0 60px rgba(201,168,76,0.05); }
+          50% { box-shadow: 0 0 30px rgba(201,168,76,0.25), 0 0 80px rgba(201,168,76,0.1); }
+        }
+        @keyframes visorGlow {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 1; }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes runeRotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes checkDraw {
+          from { stroke-dashoffset: 24; }
+          to { stroke-dashoffset: 0; }
+        }
+        
+        .section-reveal {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .section-reveal.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        
+        input::placeholder {
+          color: #6B6175;
+        }
+        input:focus {
+          outline: none;
+          border-color: #C9A84C !important;
+          box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+        }
+        
+        .cta-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 24px rgba(201,168,76,0.3) !important;
+        }
+        .cta-btn:active {
+          transform: translateY(0);
+        }
+        
+        .benefit-card:hover {
+          border-color: #C9A84C !important;
+          background: rgba(201,168,76,0.04) !important;
+        }
+        
+        .social-proof-num {
+          background: linear-gradient(135deg, #C9A84C, #E8D5A0, #C9A84C);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: shimmer 3s linear infinite;
+        }
+
+        @media (max-width: 640px) {
+          .benefits-grid { grid-template-columns: 1fr !important; }
+          .hero-heading { font-size: 36px !important; line-height: 1.15 !important; }
+          .hero-sub { font-size: 17px !important; }
+          .form-row { flex-direction: column !important; }
+          .form-row input { border-radius: 10px !important; }
+          .form-row button { border-radius: 10px !important; width: 100% !important; }
+        }
+      `}</style>
+
+      {/* Ambient Background */}
+      <div style={styles.ambientBg}>
+        <div style={styles.radialGlow1} />
+        <div style={styles.radialGlow2} />
+        <div style={styles.noiseOverlay} />
+      </div>
+
+      {/* Nav */}
+      <nav style={styles.nav}>
+        <div style={styles.navInner}>
+          <div style={styles.logoWrap}>
+            <div style={styles.logoMark}>L</div>
+            <span style={styles.logoText}>LORE</span>
+          </div>
+          <a href="#waitlist" style={styles.navCta}>Join Waitlist</a>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section
+        ref={(el) => (sectionRefs.current.hero = el)}
+        data-section="hero"
+        style={styles.hero}
+      >
+        <div style={{
+          maxWidth: 720,
+          margin: "0 auto",
+          textAlign: "center",
+          animation: "fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        }}>
+          <div style={styles.badge}>
+            <div style={styles.badgeDot} />
+            Your next chapter begins here
+          </div>
+
+          <h1 className="hero-heading" style={styles.heroHeading}>
+            Your real life is the game.
+            <br />
+            <span style={styles.heroAccent}>Start playing it.</span>
+          </h1>
+
+          <p className="hero-sub" style={styles.heroSub}>
+            Lore generates personalized side quests tailored to your city, your interests, and your initial responses. Quests push you out of your comfort zone and make everyday life less boring. Play solo or link up with others who want the same thing.
+          </p>
+
+          {/* CTA Form */}
+          <div id="waitlist" style={styles.formSection}>
+            {!submitted ? (
+              <>
+                <div className="form-row" style={styles.formRow}>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                    placeholder="Enter your email to join the quest"
+                    style={styles.emailInput}
+                  />
+                  <button
+                    className="cta-btn"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    style={{
+                      ...styles.ctaButton,
+                      opacity: isSubmitting ? 0.7 : 1,
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <svg width="16" height="16" viewBox="0 0 16 16" style={{ animation: "runeRotate 1s linear infinite" }}>
+                          <circle cx="8" cy="8" r="6" stroke="#0C0A13" strokeWidth="2" fill="none" strokeDasharray="20 12"/>
+                        </svg>
+                        Enrolling...
+                      </span>
+                    ) : (
+                      "Accept the Quest"
+                    )}
+                  </button>
+                </div>
+                <p style={styles.formNote}>
+                  Join {waitlistCount.toLocaleString()} others on the waitlist · No spam, only quests
+                </p>
+              </>
+            ) : (
+              <div style={styles.successState}>
+                <div style={styles.successIcon}>
+                  <svg width="32" height="32" viewBox="0 0 32 32">
+                    <circle cx="16" cy="16" r="14" fill="none" stroke="#C9A84C" strokeWidth="1.5"/>
+                    <path d="M10 16L14 20L22 12" stroke="#C9A84C" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" style={{ animation: "checkDraw 0.6s ease-out forwards" }}/>
+                  </svg>
+                </div>
+                <h3 style={styles.successTitle}>Quest accepted, traveler.</h3>
+                <p style={styles.successText}>
+                  You're on the list. Watch your inbox for your first quest briefing.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section
+        ref={(el) => (sectionRefs.current.how = el)}
+        data-section="how"
+        className={`section-reveal ${isVisible("how") ? "visible" : ""}`}
+        style={styles.section}
+      >
+        <p style={styles.sectionLabel}>How it works</p>
+        <h2 style={styles.sectionHeading}>Three steps. Zero grind.</h2>
+
+        <div style={styles.stepsWrap}>
+          {[
+            {
+              num: "I",
+              title: "Set up your profile",
+              desc: "Answer a few questions about your interests, your city, and what kind of experiences you're looking for. Lore uses your responses to tailor every quest to you.",
+              icon: "📜",
+            },
+            {
+              num: "II",
+              title: "Get quests built for you",
+              desc: "Receive side quests based on where you live, what you're into, and how far outside your comfort zone you want to go. No two players get the same experience.",
+              icon: "⚔️",
+            },
+            {
+              num: "III",
+              title: "Level up for real",
+              desc: "Complete quests, earn XP, and level up your character. Run solo or join multiplayer quest lines and meet people who are on the same mission.",
+              icon: "✨",
+            },
+          ].map((step, i) => (
+            <div
+              key={i}
+              style={{
+                ...styles.stepCard,
+                transitionDelay: `${i * 150}ms`,
+              }}
+            >
+              <div style={styles.stepNum}>{step.num}</div>
+              <div style={styles.stepIcon}>{step.icon}</div>
+              <h3 style={styles.stepTitle}>{step.title}</h3>
+              <p style={styles.stepDesc}>{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* BENEFITS */}
+      <section
+        ref={(el) => (sectionRefs.current.benefits = el)}
+        data-section="benefits"
+        className={`section-reveal ${isVisible("benefits") ? "visible" : ""}`}
+        style={{ ...styles.section, paddingTop: 40 }}
+      >
+        <p style={styles.sectionLabel}>Why join the waitlist</p>
+        <h2 style={styles.sectionHeading}>Early adventurers get rewarded</h2>
+
+        <div className="benefits-grid" style={styles.benefitsGrid}>
+          {[
+            {
+              icon: "🗡️",
+              title: "First access to the app",
+              desc: "Be among the first to play when Lore launches. Waitlist members get priority onboarding before public release.",
+            },
+            {
+              icon: "🛡️",
+              title: "Shape the product",
+              desc: "Your feedback directly influences what we build. Early users become founding members of the Lore community.",
+            },
+            {
+              icon: "👑",
+              title: "Founder's badge & bonus XP",
+              desc: "Exclusive in-app badge and a permanent XP boost that no one else will ever be able to earn. Ever.",
+            },
+            {
+              icon: "🔮",
+              title: "Exclusive quest lines",
+              desc: "Founder-only epic quest chains that tell a unique story, locked permanently after launch.",
+            },
+          ].map((b, i) => (
+            <div
+              key={i}
+              className="benefit-card"
+              style={{
+                ...styles.benefitCard,
+                transitionDelay: `${i * 100}ms`,
+              }}
+            >
+              <div style={styles.benefitIcon}>{b.icon}</div>
+              <h3 style={styles.benefitTitle}>{b.title}</h3>
+              <p style={styles.benefitDesc}>{b.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* SOCIAL PROOF / URGENCY */}
+      <section
+        ref={(el) => (sectionRefs.current.proof = el)}
+        data-section="proof"
+        className={`section-reveal ${isVisible("proof") ? "visible" : ""}`}
+        style={styles.proofSection}
+      >
+        <div style={styles.proofInner}>
+          <div style={styles.proofStats}>
+            <div style={styles.proofStat}>
+              <span className="social-proof-num" style={styles.proofNum}>{waitlistCount.toLocaleString()}</span>
+              <span style={styles.proofLabel}>on the waitlist</span>
+            </div>
+            <div style={styles.proofDivider} />
+            <div style={styles.proofStat}>
+              <span className="social-proof-num" style={styles.proofNum}>Spring '26</span>
+              <span style={styles.proofLabel}>target launch</span>
+            </div>
+            <div style={styles.proofDivider} />
+            <div style={styles.proofStat}>
+              <span className="social-proof-num" style={styles.proofNum}>1,000</span>
+              <span style={styles.proofLabel}>founding member cap</span>
+            </div>
+          </div>
+
+          <p style={styles.proofNote}>
+            Founding member slots are limited. Once the first 1,000 spots fill, the waitlist closes until launch.
+          </p>
+        </div>
+      </section>
+
+      {/* CHRONICLER QUOTE */}
+      <section
+        ref={(el) => (sectionRefs.current.quote = el)}
+        data-section="quote"
+        className={`section-reveal ${isVisible("quote") ? "visible" : ""}`}
+        style={styles.quoteSection}
+      >
+        <div style={styles.quoteInner}>
+          <div style={styles.quoteBar} />
+          <blockquote style={styles.quoteText}>
+            "Every great story begins with a single step off the familiar path. Your quests are waiting, traveler. The only question is, will you answer?"
+          </blockquote>
+          <p style={styles.quoteAttrib}>The Chronicler, your personal game master</p>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section
+        ref={(el) => (sectionRefs.current.finalcta = el)}
+        data-section="finalcta"
+        className={`section-reveal ${isVisible("finalcta") ? "visible" : ""}`}
+        style={styles.finalCta}
+      >
+        <h2 style={styles.finalHeading}>Ready to start your story?</h2>
+        <p style={styles.finalSub}>
+          Join the waitlist and be first in line when Lore opens its gates.
+        </p>
+
+        {!submitted ? (
+          <div style={{ maxWidth: 440, margin: "0 auto" }}>
+            <div className="form-row" style={styles.formRow}>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                placeholder="Your email address"
+                style={styles.emailInput}
+              />
+              <button
+                className="cta-btn"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                style={{
+                  ...styles.ctaButton,
+                  opacity: isSubmitting ? 0.7 : 1,
+                }}
+              >
+                {isSubmitting ? "Enrolling..." : "Join the Waitlist"}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p style={{ color: "#C9A84C", fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 18 }}>
+            You're already on the list, traveler. Your story is being written.
+          </p>
+        )}
+      </section>
+
+      {/* Footer */}
+      <footer style={styles.footer}>
+        <div style={styles.footerInner}>
+          <div style={styles.logoWrap}>
+            <div style={{ ...styles.logoMark, width: 28, height: 28, fontSize: 14 }}>L</div>
+            <span style={{ ...styles.logoText, fontSize: 14 }}>LORE</span>
+          </div>
+          <p style={styles.footerText}>
+            © 2026 Lore. Your life, gamified.
+          </p>
+          <div style={styles.footerLinks}>
+            <a href="#" style={styles.footerLink}>Privacy</a>
+            <a href="#" style={styles.footerLink}>Terms</a>
+            <a href="https://instagram.com/damien.explores" target="_blank" rel="noopener" style={styles.footerLink}>Instagram</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-/* Join button */
-.join-btn{padding:15px 32px;border-radius:14px;background:linear-gradient(135deg,#C9A96E,#A8894A);color:#06060C;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;letter-spacing:.5px;cursor:pointer;transition:transform .15s,box-shadow .15s;animation:ctaGlow 4s ease 2s infinite}
-.join-btn:hover{transform:scale(1.03);box-shadow:0 6px 28px rgba(201,169,110,.35)}
-.join-btn:active{transform:scale(.98)}
-.join-wrap{margin-top:22px;display:flex;flex-direction:column;align-items:center;animation:fadeUp .6s ease 1s both}
-.social-proof{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px}
-.avatars{display:flex}
-.av{width:22px;height:22px;border-radius:50%;border:2px solid #06060C;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:#C9A96E;font-family:'Cinzel',serif}
-.av:nth-child(1){background:rgba(255,107,90,.15);margin-right:-5px;z-index:3}
-.av:nth-child(2){background:rgba(80,216,144,.15);margin-right:-5px;z-index:2}
-.av:nth-child(3){background:rgba(91,159,255,.15);z-index:1}
-.proof-t{color:#555;font-size:10px}
-.proof-t strong{color:#C9A96E;font-weight:700}
-.live-dot{width:5px;height:5px;border-radius:50%;background:#50D890;display:inline-block;animation:pulseR 2s ease infinite;margin-right:3px}
-.micro{margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:9px;color:#3a3a3a}
-.micro span{display:flex;align-items:center;gap:3px}
-.micro .ck{color:#50D890;font-size:9px}
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "#0C0A13",
+    color: "#E8E2D6",
+    fontFamily: "'Crimson Pro', Georgia, serif",
+    position: "relative",
+    overflow: "hidden",
+  },
+  ambientBg: {
+    position: "fixed",
+    inset: 0,
+    pointerEvents: "none",
+    zIndex: 0,
+  },
+  radialGlow1: {
+    position: "absolute",
+    top: "-20%",
+    left: "30%",
+    width: "60vw",
+    height: "60vw",
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)",
+  },
+  radialGlow2: {
+    position: "absolute",
+    bottom: "10%",
+    right: "20%",
+    width: "40vw",
+    height: "40vw",
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(107,79,187,0.04) 0%, transparent 70%)",
+  },
+  noiseOverlay: {
+    position: "absolute",
+    inset: 0,
+    opacity: 0.03,
+    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+    backgroundSize: "128px 128px",
+  },
 
-/* ═══ SIDE BY SIDE SECTIONS ═══ */
-.row{display:flex;align-items:center;gap:48px;max-width:960px;margin:0 auto;padding:64px 28px}
-.row-reverse{flex-direction:row-reverse}
-.row-graphic{flex:1;min-width:0}
-.row-text{flex:1;min-width:0}
-@media(max-width:720px){
-  .row,.row-reverse{flex-direction:column;gap:28px;padding:40px 20px}
-  .row-graphic{width:100%;max-width:320px}
-  .row-text{text-align:center}
-  .row-text .s-sub{margin:0 auto}
-}
-.s-label{font-size:9px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#C9A96E;margin-bottom:8px}
-.s-title{font-family:'Cinzel',serif;font-size:clamp(20px,3.5vw,30px);font-weight:800;line-height:1.3;margin-bottom:12px}
-.s-title em{color:#C9A96E;font-style:normal}
-.s-sub{color:#777;font-size:13px;line-height:1.65;max-width:380px;margin-bottom:20px}
-.badge-note{display:inline-flex;align-items:center;gap:6px;background:rgba(212,123,255,.06);border:1px solid rgba(212,123,255,.1);border-radius:10px;padding:7px 12px;font-size:9px;color:#D47BFF;font-weight:600;margin-top:12px}
+  // Nav
+  nav: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+    padding: "16px 24px",
+    background: "rgba(12,10,19,0.85)",
+    backdropFilter: "blur(16px)",
+    borderBottom: "1px solid rgba(42,36,64,0.5)",
+  },
+  navInner: {
+    maxWidth: 960,
+    margin: "0 auto",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  logoWrap: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+  },
+  logoMark: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    background: "linear-gradient(135deg, #C9A84C, #8B7333)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 16,
+    fontWeight: 700,
+    color: "#0C0A13",
+    fontFamily: "'Cinzel', Georgia, serif",
+  },
+  logoText: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 16,
+    fontWeight: 600,
+    color: "#C9A84C",
+    letterSpacing: 3,
+  },
+  navCta: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 12,
+    fontWeight: 600,
+    color: "#C9A84C",
+    textDecoration: "none",
+    padding: "8px 16px",
+    border: "1px solid rgba(201,168,76,0.3)",
+    borderRadius: 8,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+  },
 
-/* Phone mockup */
-.phone{max-width:260px;width:260px;background:#000;border-radius:30px;padding:9px;border:2px solid rgba(255,255,255,.06);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 24px rgba(201,169,110,.03);margin:0 auto}
-.notch{width:70px;height:16px;background:#000;border-radius:0 0 10px 10px;margin:0 auto}
-.screen{background:#06060C;border-radius:22px;padding:12px 10px 14px;overflow:hidden;height:420px;overflow-y:auto}
-.screen::-webkit-scrollbar{display:none}
-.screen{-ms-overflow-style:none;scrollbar-width:none}
+  // Hero
+  hero: {
+    position: "relative",
+    zIndex: 1,
+    padding: "160px 24px 80px",
+    minHeight: "90vh",
+    display: "flex",
+    alignItems: "center",
+  },
+  badge: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    padding: "6px 16px",
+    borderRadius: 100,
+    border: "1px solid rgba(201,168,76,0.2)",
+    background: "rgba(201,168,76,0.05)",
+    fontSize: 13,
+    fontWeight: 400,
+    color: "#C9A84C",
+    marginBottom: 28,
+    fontFamily: "'Crimson Pro', Georgia, serif",
+    letterSpacing: 0.5,
+  },
+  badgeDot: {
+    width: 6,
+    height: 6,
+    borderRadius: "50%",
+    background: "#C9A84C",
+    animation: "visorGlow 2s ease-in-out infinite",
+  },
+  heroHeading: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 52,
+    fontWeight: 600,
+    lineHeight: 1.12,
+    color: "#E8E2D6",
+    marginBottom: 20,
+    letterSpacing: -0.5,
+  },
+  heroAccent: {
+    color: "#C9A84C",
+  },
+  heroSub: {
+    fontSize: 19,
+    lineHeight: 1.65,
+    color: "#8A8290",
+    maxWidth: 560,
+    margin: "0 auto 40px",
+    fontWeight: 300,
+  },
 
-/* Quest cards for graphic section */
-.quest-g{border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:12px;margin-bottom:8px;display:flex;gap:9px;align-items:flex-start}
-.quest-g-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.quest-g-title{color:#E8E0D4;font-size:12px;font-weight:500;line-height:1.35;margin-bottom:3px}
-.quest-g-why{color:#C9A96E;font-size:8px;opacity:.7;margin-bottom:4px}
-.quest-g-tags{display:flex;gap:4px;flex-wrap:wrap}
-.quest-g-tag{font-size:7px;font-weight:700;padding:2px 6px;border-radius:5px;text-transform:uppercase;letter-spacing:.3px}
-.quest-g-xp{color:#C9A96E;font-size:13px;font-weight:900;font-family:'Cinzel',serif;flex-shrink:0}
+  // Form
+  formSection: {
+    maxWidth: 480,
+    margin: "0 auto",
+  },
+  formRow: {
+    display: "flex",
+    gap: 0,
+    borderRadius: 12,
+    overflow: "hidden",
+    border: "1px solid #2A2440",
+    background: "#15121F",
+    animation: "glowPulse 4s ease-in-out infinite",
+  },
+  emailInput: {
+    flex: 1,
+    padding: "16px 20px",
+    fontSize: 15,
+    fontFamily: "'Crimson Pro', Georgia, serif",
+    background: "transparent",
+    border: "none",
+    color: "#E8E2D6",
+    minWidth: 0,
+  },
+  ctaButton: {
+    padding: "16px 28px",
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 13,
+    fontWeight: 600,
+    letterSpacing: 0.5,
+    background: "linear-gradient(135deg, #C9A84C, #B8963F)",
+    color: "#0C0A13",
+    border: "none",
+    cursor: "pointer",
+    whiteSpace: "nowrap",
+    transition: "all 0.2s",
+  },
+  formNote: {
+    marginTop: 14,
+    fontSize: 13,
+    color: "#6B6175",
+    fontWeight: 300,
+  },
 
-/* Badge grid */
-.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:300px;margin:0 auto}
-.badge-card{border-radius:12px;padding:14px 8px;text-align:center;border:1px solid;position:relative;overflow:hidden}
-.badge-card-icon{font-size:24px;margin-bottom:4px}
-.badge-card-name{color:#E8E0D4;font-size:8px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase}
-.badge-card-tier{font-size:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-.badge-shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,123,255,.04),transparent);background-size:200% 100%;animation:shimmer 4s linear infinite}
+  // Success State
+  successState: {
+    textAlign: "center",
+    padding: "24px 0",
+    animation: "fadeUp 0.6s ease-out",
+  },
+  successIcon: {
+    marginBottom: 16,
+  },
+  successTitle: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 22,
+    fontWeight: 600,
+    color: "#C9A84C",
+    marginBottom: 8,
+  },
+  successText: {
+    fontSize: 16,
+    color: "#8A8290",
+    lineHeight: 1.6,
+    fontWeight: 300,
+  },
 
-/* Share card graphic */
-.share-card{max-width:280px;width:100%;background:linear-gradient(155deg,#0e0e1a,#06060C 40%,#0a0816);border-radius:18px;padding:22px 18px 18px;border:1px solid rgba(201,169,110,.14);position:relative;overflow:hidden;margin:0 auto}
-.sc-corner-tl{position:absolute;top:0;left:0;width:32px;height:32px;border-top:1.5px solid rgba(201,169,110,.15);border-left:1.5px solid rgba(201,169,110,.15);border-radius:18px 0 0 0}
-.sc-corner-br{position:absolute;bottom:0;right:0;width:32px;height:32px;border-bottom:1.5px solid rgba(201,169,110,.15);border-right:1.5px solid rgba(201,169,110,.15);border-radius:0 0 18px 0}
+  // Sections
+  section: {
+    position: "relative",
+    zIndex: 1,
+    padding: "80px 24px",
+    maxWidth: 960,
+    margin: "0 auto",
+  },
+  sectionLabel: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 12,
+    fontWeight: 600,
+    color: "#C9A84C",
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    marginBottom: 12,
+    textAlign: "center",
+  },
+  sectionHeading: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 32,
+    fontWeight: 600,
+    color: "#E8E2D6",
+    textAlign: "center",
+    marginBottom: 48,
+    lineHeight: 1.2,
+  },
 
-/* Divider */
-.divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.15),transparent);margin:0 auto}
+  // Steps
+  stepsWrap: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: 20,
+  },
+  stepCard: {
+    padding: "32px 24px",
+    background: "rgba(21,18,31,0.6)",
+    border: "1px solid #2A2440",
+    borderRadius: 14,
+    textAlign: "center",
+    position: "relative",
+  },
+  stepNum: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 11,
+    fontWeight: 700,
+    color: "#C9A84C",
+    letterSpacing: 2,
+    marginBottom: 16,
+    opacity: 0.6,
+  },
+  stepIcon: {
+    fontSize: 32,
+    marginBottom: 16,
+  },
+  stepTitle: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 16,
+    fontWeight: 600,
+    color: "#E8E2D6",
+    marginBottom: 10,
+  },
+  stepDesc: {
+    fontSize: 15,
+    lineHeight: 1.6,
+    color: "#8A8290",
+    fontWeight: 300,
+  },
 
-/* Bottom CTA */
-.bot{padding:50px 20px 64px;text-align:center}
+  // Benefits
+  benefitsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: 16,
+  },
+  benefitCard: {
+    padding: "28px 24px",
+    background: "rgba(21,18,31,0.4)",
+    border: "1px solid #2A2440",
+    borderRadius: 14,
+    transition: "all 0.3s",
+    cursor: "default",
+  },
+  benefitIcon: {
+    fontSize: 28,
+    marginBottom: 14,
+  },
+  benefitTitle: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 16,
+    fontWeight: 600,
+    color: "#E8E2D6",
+    marginBottom: 8,
+  },
+  benefitDesc: {
+    fontSize: 15,
+    lineHeight: 1.6,
+    color: "#8A8290",
+    fontWeight: 300,
+  },
 
-footer{padding:24px 20px;text-align:center;border-top:1px solid rgba(255,255,255,.03)}
-.f-logo{font-family:'Cinzel',serif;font-size:11px;font-weight:800;color:#C9A96E;letter-spacing:4px;text-transform:uppercase;opacity:.25}
-footer p{color:#1a1a1a;font-size:8px;margin-top:3px}
-</style>
-</head>
-<body>
+  // Social Proof
+  proofSection: {
+    position: "relative",
+    zIndex: 1,
+    padding: "60px 24px",
+  },
+  proofInner: {
+    maxWidth: 720,
+    margin: "0 auto",
+    padding: "40px 32px",
+    background: "rgba(21,18,31,0.5)",
+    border: "1px solid #2A2440",
+    borderRadius: 16,
+    textAlign: "center",
+  },
+  proofStats: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 32,
+    flexWrap: "wrap",
+    marginBottom: 20,
+  },
+  proofStat: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 4,
+  },
+  proofNum: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 28,
+    fontWeight: 700,
+  },
+  proofLabel: {
+    fontSize: 13,
+    color: "#6B6175",
+    fontWeight: 300,
+  },
+  proofDivider: {
+    width: 1,
+    height: 40,
+    background: "#2A2440",
+  },
+  proofNote: {
+    fontSize: 14,
+    color: "#8A8290",
+    fontWeight: 300,
+    fontStyle: "italic",
+  },
 
-<!-- ═══ HERO ═══ -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="embers" id="embers"></div>
-  <div class="logo">LORE<span class="logo-dot">●</span></div>
-  <div class="hero-line"></div>
-  <h1 class="hero-h1">Personalized Quests Built Around <em>Your Life</em></h1>
-  <p class="hero-sub">Weekly side quests based on <strong>your city</strong>, <strong>your stats</strong>, and <strong>your weak spots</strong>. Not a to-do list. An RPG for the life you're already living.</p>
+  // Quote
+  quoteSection: {
+    position: "relative",
+    zIndex: 1,
+    padding: "60px 24px",
+  },
+  quoteInner: {
+    maxWidth: 600,
+    margin: "0 auto",
+    textAlign: "center",
+    position: "relative",
+  },
+  quoteBar: {
+    width: 40,
+    height: 2,
+    background: "#C9A84C",
+    margin: "0 auto 24px",
+    opacity: 0.4,
+  },
+  quoteText: {
+    fontFamily: "'Crimson Pro', Georgia, serif",
+    fontSize: 22,
+    fontStyle: "italic",
+    fontWeight: 300,
+    lineHeight: 1.6,
+    color: "#E8E2D6",
+    marginBottom: 16,
+  },
+  quoteAttrib: {
+    fontSize: 14,
+    color: "#C9A84C",
+    fontWeight: 500,
+    letterSpacing: 0.5,
+  },
 
-  <!-- Split: CTA left, Phone right -->
-  <div class="hero-split">
-    <div class="hero-left">
-      <div class="social-proof" style="justify-content:flex-start">
-        <div class="avatars"><div class="av">M</div><div class="av">K</div><div class="av">J</div></div>
-        <span class="proof-t"><span class="live-dot"></span><strong id="counter">847</strong> on the waitlist</span>
-      </div>
-      <button class="join-btn" onclick="openTally()" style="width:100%;max-width:320px">Join Waitlist ⚔️</button>
-      <div class="micro" style="justify-content:flex-start"><span><span class="ck">✓</span> Free</span><span><span class="ck">✓</span> No spam</span><span><span class="ck">✓</span> iOS & Android</span></div>
-      <div class="badge-note" style="margin-top:12px">⚔️ First 1,000 get a Founder Badge</div>
-    </div>
-    <div class="hero-right">
-      <div style="margin-bottom:6px;display:flex;align-items:center;gap:5px;justify-content:center">
-        <div style="width:5px;height:5px;border-radius:50%;background:#50D890;animation:pulseR 2s ease infinite"></div>
-        <span style="color:#666;font-size:9px;font-weight:500;letter-spacing:.5px">Interactive demo · More features coming soon</span>
-      </div>
+  // Final CTA
+  finalCta: {
+    position: "relative",
+    zIndex: 1,
+    padding: "80px 24px",
+    textAlign: "center",
+  },
+  finalHeading: {
+    fontFamily: "'Cinzel', Georgia, serif",
+    fontSize: 36,
+    fontWeight: 600,
+    color: "#E8E2D6",
+    marginBottom: 12,
+    lineHeight: 1.2,
+  },
+  finalSub: {
+    fontSize: 18,
+    color: "#8A8290",
+    fontWeight: 300,
+    marginBottom: 32,
+  },
 
-  <!-- Interactive phone -->
-  <div class="phone" style="margin-bottom:24px" id="interactive-phone">
-    <div class="notch"></div>
-    <div class="screen" id="phone-screen">
-      <!-- Header (always visible) -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding:0 2px">
-        <div style="display:flex;align-items:center;gap:1px"><span style="color:#C9A96E;font-size:9px;font-weight:900;font-family:'Cinzel',serif;letter-spacing:2px">LORE</span><span style="color:#FF6B5A;font-size:3px;margin-top:-4px">●</span></div>
-        <div style="background:rgba(255,107,90,.08);border-radius:8px;padding:2px 5px"><span style="color:#FF6B5A;font-size:6px;font-weight:600">🔥 6 streak</span></div>
-      </div>
-
-      <!-- SCREEN: Quests (default) -->
-      <div id="scr-quests">
-        <div style="margin-bottom:6px"><div style="color:#C9A96E;font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif;margin-bottom:1px">Quest Log</div><div style="color:#E8E0D4;font-size:10px;font-weight:800;font-family:'Cinzel',serif">This Week's Quests</div></div>
-        <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:2px;background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.1);border-radius:5px;padding:2px 5px"><span style="font-size:5px">🎯</span><span style="color:#C9A96E;font-size:5.5px;font-weight:600">For Alex</span></div>
-          <div style="border:1px solid rgba(255,255,255,.05);border-radius:5px;padding:2px 5px"><span style="color:#777;font-size:5.5px">📍 Chicago, IL</span></div>
-          <div style="border:1px solid rgba(255,255,255,.05);border-radius:5px;padding:2px 5px"><span style="color:#777;font-size:5.5px">🌧️ 54°F</span></div>
-        </div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(80,216,144,.1);border:1px solid rgba(80,216,144,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">🌿</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Ride the L to a random stop and walk 20 min</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 No Explore quest in 11 days</div><div style="display:flex;gap:2px"><span style="background:rgba(80,216,144,.1);color:#50D890;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">EXPLORE</span><span style="color:#444;font-size:5px">🚇 Any L line</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+60</span></div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(255,107,90,.1);border:1px solid rgba(255,107,90,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">🔥</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Ask a barista their favorite drink and order it</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Social is your weakest stat</div><div style="display:flex;gap:2px"><span style="background:rgba(255,107,90,.1);color:#FF6B5A;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">SOCIAL</span><span style="color:#444;font-size:5px">☕ Near you</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+30</span></div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(232,184,75,.1);border:1px solid rgba(232,184,75,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">🍳</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Make a meal using only corner store ingredients</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Budget: free — $0 quest</div><div style="display:flex;gap:2px"><span style="background:rgba(232,184,75,.1);color:#E8B84B;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">CULINARY</span><span style="color:#444;font-size:5px">🏠 At home</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+45</span></div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:7px 6px;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start"><div style="width:18px;height:18px;border-radius:5px;background:rgba(91,159,255,.1);border:1px solid rgba(91,159,255,.12);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0">📚</div><div style="flex:1"><div style="color:#E8E0D4;font-size:7.5px;font-weight:500;line-height:1.3;margin-bottom:2px">Read the first chapter of 3 random books at a bookstore</div><div style="color:#C9A96E;font-size:5px;opacity:.7;margin-bottom:2px">🎯 Knowledge stalled at level 4</div><div style="display:flex;gap:2px"><span style="background:rgba(91,159,255,.1);color:#5B9FFF;font-size:5px;font-weight:700;padding:1px 4px;border-radius:3px">KNOWLEDGE</span><span style="color:#444;font-size:5px">📍 Myopic Books</span></div></div><span style="color:#C9A96E;font-size:8px;font-weight:900;font-family:'Cinzel',serif">+35</span></div>
-        <div style="border:1px solid rgba(80,216,144,.06);border-radius:7px;padding:6px;display:flex;gap:6px;align-items:center;opacity:.45"><div style="width:18px;height:18px;border-radius:5px;background:rgba(80,216,144,.1);display:flex;align-items:center;justify-content:center;font-size:7px;color:#50D890;font-weight:700;flex-shrink:0">✓</div><div style="flex:1"><div style="color:#666;font-size:7px;text-decoration:line-through">Sketch a stranger without them noticing</div><div style="color:#50D890;font-size:5px;font-weight:600;margin-top:1px">+40 XP · 1d ago</div></div></div>
-      </div>
-
-      <!-- SCREEN: Character -->
-      <div id="scr-char" style="display:none">
-        <div style="background:linear-gradient(155deg,rgba(201,169,110,.1),rgba(6,6,12,.98) 30%);border-radius:10px;padding:10px 8px;border:1px solid rgba(201,169,110,.08);margin-bottom:6px">
-          <div style="text-align:center;margin-bottom:4px"><span style="color:rgba(201,169,110,.3);font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif">Your Character</span></div>
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
-            <div style="width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,rgba(201,169,110,.18),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">A</div>
-            <div style="flex:1"><div style="color:#E8E0D4;font-size:9px;font-weight:700;font-family:'Cinzel',serif">Alex Rivera</div><div style="color:#C9A96E;font-size:5px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Night Owl Explorer</div></div>
-            <div style="text-align:right"><div style="color:#C9A96E;font-size:18px;font-weight:900;font-family:'Cinzel',serif;line-height:1">7</div><div style="color:rgba(201,169,110,.3);font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px">Level</div></div>
-          </div>
-          <div style="background:rgba(255,255,255,.05);border-radius:3px;height:3px"><div style="width:45%;height:100%;border-radius:3px;background:linear-gradient(90deg,#C9A96E55,#C9A96E)"></div></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px">
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(255,107,90,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(255,107,90,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🔥</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Social</span><span style="color:#FF6B5A;font-size:8px;font-weight:900;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:30%;height:100%;border-radius:2px;background:#FF6B5A"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(80,216,144,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(80,216,144,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🌿</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Explore</span><span style="color:#50D890;font-size:8px;font-weight:900;font-family:'Cinzel',serif">10</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:55%;height:100%;border-radius:2px;background:#50D890"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(255,179,71,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(255,179,71,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🎨</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Create</span><span style="color:#FFB347;font-size:8px;font-weight:900;font-family:'Cinzel',serif">6</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:72%;height:100%;border-radius:2px;background:#FFB347"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(212,123,255,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(212,123,255,.1);display:flex;align-items:center;justify-content:center;font-size:7px">💪</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Physical</span><span style="color:#D47BFF;font-size:8px;font-weight:900;font-family:'Cinzel',serif">8</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:25%;height:100%;border-radius:2px;background:#D47BFF"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(232,184,75,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(232,184,75,.1);display:flex;align-items:center;justify-content:center;font-size:7px">🍳</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Culinary</span><span style="color:#E8B84B;font-size:8px;font-weight:900;font-family:'Cinzel',serif">5</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:48%;height:100%;border-radius:2px;background:#E8B84B"></div></div></div></div>
-          <div style="display:flex;align-items:center;gap:5px;background:rgba(91,159,255,.05);border-radius:6px;padding:5px 6px"><div style="width:16px;height:16px;border-radius:4px;background:rgba(91,159,255,.1);display:flex;align-items:center;justify-content:center;font-size:7px">📚</div><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#ccc;font-size:7px;font-family:'Cinzel',serif;font-weight:600">Knowledge</span><span style="color:#5B9FFF;font-size:8px;font-weight:900;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:2px;height:2px"><div style="width:15%;height:100%;border-radius:2px;background:#5B9FFF"></div></div></div></div>
-        </div>
-        <!-- Weekly recap -->
-        <div style="display:flex;gap:4px;margin-top:6px">
-          <div style="flex:1;text-align:center;background:rgba(80,216,144,.05);border-radius:6px;padding:6px 4px"><div style="font-size:7px;margin-bottom:1px">✓</div><div style="color:#50D890;font-size:9px;font-weight:800;font-family:'Cinzel',serif">4</div><div style="color:#444;font-size:4px;text-transform:uppercase;letter-spacing:.5px">Quests</div></div>
-          <div style="flex:1;text-align:center;background:rgba(201,169,110,.05);border-radius:6px;padding:6px 4px"><div style="font-size:7px;margin-bottom:1px">⚡</div><div style="color:#C9A96E;font-size:9px;font-weight:800;font-family:'Cinzel',serif">+210</div><div style="color:#444;font-size:4px;text-transform:uppercase;letter-spacing:.5px">XP</div></div>
-          <div style="flex:1;text-align:center;background:rgba(91,159,255,.05);border-radius:6px;padding:6px 4px"><div style="font-size:7px;margin-bottom:1px">🌿</div><div style="color:#5B9FFF;font-size:9px;font-weight:800;font-family:'Cinzel',serif">Explore</div><div style="color:#444;font-size:4px;text-transform:uppercase;letter-spacing:.5px">Top Stat</div></div>
-        </div>
-      </div>
-
-      <!-- SCREEN: Badges -->
-      <div id="scr-badges" style="display:none">
-        <div style="margin-bottom:6px"><div style="color:#C9A96E;font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif;margin-bottom:1px">Achievements</div><div style="color:#E8E0D4;font-size:10px;font-weight:800;font-family:'Cinzel',serif">Your Badges</div><div style="color:#555;font-size:5px;margin-top:2px">5 earned · 3 locked</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px">
-          <div style="background:rgba(107,138,122,.05);border:1px solid rgba(107,138,122,.1);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:16px;margin-bottom:2px">🗺️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Trailblazer</div><div style="color:#6B8A7A;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Common</div></div>
-          <div style="background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.1);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:16px;margin-bottom:2px">👨‍🍳</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Midnight Chef</div><div style="color:#C9A96E;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Rare</div></div>
-          <div style="background:rgba(212,123,255,.05);border:1px solid rgba(212,123,255,.1);border-radius:8px;padding:8px 4px;text-align:center;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,123,255,.03),transparent);background-size:200% 100%;animation:shimmer 4s linear infinite"></div><div style="font-size:16px;margin-bottom:2px;position:relative">⚔️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase;position:relative">Founder</div><div style="color:#D47BFF;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px;position:relative">Legendary</div></div>
-          <div style="background:rgba(107,138,122,.05);border:1px solid rgba(107,138,122,.1);border-radius:8px;padding:8px 4px;text-align:center"><div style="font-size:16px;margin-bottom:2px">🌅</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Early Riser</div><div style="color:#6B8A7A;font-size:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Common</div></div>
-        </div>
-        <div style="color:#555;font-size:5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Locked</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-          <div style="border:1px solid rgba(255,255,255,.04);border-radius:8px;padding:8px 4px;text-align:center;opacity:.4"><div style="font-size:16px;margin-bottom:2px;filter:grayscale(.8)">💬</div><div style="color:#555;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Conversation Alchemist</div><div style="color:#C9A96E;font-size:4px;font-weight:700;margin-top:2px">🔒 Lvl 4/10</div></div>
-          <div style="border:1px solid rgba(255,255,255,.04);border-radius:8px;padding:8px 4px;text-align:center;opacity:.4"><div style="font-size:16px;margin-bottom:2px;filter:grayscale(.8)">🏛️</div><div style="color:#555;font-size:6px;font-weight:700;font-family:'Cinzel',serif;text-transform:uppercase">Renaissance Soul</div><div style="color:#C9A96E;font-size:4px;font-weight:700;margin-top:2px">🔒 2/6 stats</div></div>
-        </div>
-      </div>
-
-      <!-- SCREEN: Share -->
-      <div id="scr-share" style="display:none">
-        <div style="margin-bottom:6px"><div style="color:#C9A96E;font-size:5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'Cinzel',serif;margin-bottom:1px">Built to Share</div><div style="color:#E8E0D4;font-size:10px;font-weight:800;font-family:'Cinzel',serif">Character Card</div></div>
-        <div style="background:linear-gradient(155deg,#0e0e1a,#06060C 40%,#0a0816);border-radius:10px;padding:14px 10px 10px;border:1px solid rgba(201,169,110,.12);position:relative;overflow:hidden">
-          <div style="position:absolute;top:0;left:0;width:16px;height:16px;border-top:1px solid rgba(201,169,110,.12);border-left:1px solid rgba(201,169,110,.12);border-radius:10px 0 0 0"></div>
-          <div style="position:absolute;bottom:0;right:0;width:16px;height:16px;border-bottom:1px solid rgba(201,169,110,.12);border-right:1px solid rgba(201,169,110,.12);border-radius:0 0 10px 0"></div>
-          <div style="text-align:center;margin-bottom:8px">
-            <div style="width:32px;height:32px;border-radius:8px;margin:0 auto 4px;background:linear-gradient(135deg,rgba(201,169,110,.15),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">A</div>
-            <div style="color:#E8E0D4;font-size:9px;font-weight:700;font-family:'Cinzel',serif">Alex Rivera</div>
-            <div style="color:#C9A96E;font-size:5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:1px">Night Owl Explorer</div>
-            <div style="color:#C9A96E;font-size:16px;font-weight:900;font-family:'Cinzel',serif;margin-top:3px;line-height:1">7</div>
-            <div style="color:rgba(201,169,110,.3);font-size:4px;text-transform:uppercase;letter-spacing:1.5px">Level</div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px">
-            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🔥</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Social</span><span style="color:#FF6B5A;font-size:5px;font-weight:800">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:30%;height:100%;border-radius:1px;background:#FF6B5A"></div></div></div></div>
-            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🌿</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Explore</span><span style="color:#50D890;font-size:5px;font-weight:800">10</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:55%;height:100%;border-radius:1px;background:#50D890"></div></div></div></div>
-            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🎨</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Create</span><span style="color:#FFB347;font-size:5px;font-weight:800">6</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:72%;height:100%;border-radius:1px;background:#FFB347"></div></div></div></div>
-            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">💪</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Physical</span><span style="color:#D47BFF;font-size:5px;font-weight:800">8</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:25%;height:100%;border-radius:1px;background:#D47BFF"></div></div></div></div>
-            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">🍳</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Culinary</span><span style="color:#E8B84B;font-size:5px;font-weight:800">5</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:48%;height:100%;border-radius:1px;background:#E8B84B"></div></div></div></div>
-            <div style="display:flex;align-items:center;gap:3px;padding:3px 4px"><span style="font-size:6px">📚</span><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="color:#666;font-size:5px">Knowledge</span><span style="color:#5B9FFF;font-size:5px;font-weight:800">4</span></div><div style="background:rgba(255,255,255,.04);border-radius:1px;height:1.5px;margin-top:1px"><div style="width:15%;height:100%;border-radius:1px;background:#5B9FFF"></div></div></div></div>
-          </div>
-          <div style="display:flex;justify-content:center;gap:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.03)">
-            <div style="text-align:center"><div style="font-size:10px">🗺️</div><div style="color:#444;font-size:4px;margin-top:1px">Trailblazer</div></div>
-            <div style="text-align:center"><div style="font-size:10px">👨‍🍳</div><div style="color:#444;font-size:4px;margin-top:1px">Midnight Chef</div></div>
-            <div style="text-align:center"><div style="font-size:10px">⚔️</div><div style="color:#444;font-size:4px;margin-top:1px">Founder</div></div>
-          </div>
-          <div style="text-align:center;margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.02);color:rgba(201,169,110,.15);font-size:5px;font-weight:700;font-family:'Cinzel',serif;letter-spacing:3px;text-transform:uppercase">lore</div>
-        </div>
-        <div style="text-align:center;margin-top:6px;color:#555;font-size:5px;line-height:1.4">Share your character card like a Spotify Wrapped. Screenshot-ready.</div>
-      </div>
-
-      <!-- Tab bar (interactive) -->
-      <div style="display:flex;justify-content:space-around;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.04)">
-        <div onclick="switchTab('char')" id="tab-char" style="text-align:center;cursor:pointer;opacity:.3;transition:opacity .2s"><div style="font-size:10px">⚔️</div><div style="font-size:4px;color:#444;margin-top:1px">Character</div></div>
-        <div onclick="switchTab('quests')" id="tab-quests" style="text-align:center;cursor:pointer;transition:opacity .2s"><div style="font-size:10px">📜</div><div style="font-size:4px;color:#C9A96E;font-weight:600;margin-top:1px">Quests</div><div style="width:2px;height:2px;border-radius:50%;background:#C9A96E;margin:1px auto 0"></div></div>
-        <div onclick="switchTab('badges')" id="tab-badges" style="text-align:center;cursor:pointer;opacity:.3;transition:opacity .2s"><div style="font-size:10px">🏆</div><div style="font-size:4px;color:#444;margin-top:1px">Badges</div></div>
-        <div onclick="switchTab('share')" id="tab-share" style="text-align:center;cursor:pointer;opacity:.3;transition:opacity .2s"><div style="font-size:10px">🃏</div><div style="font-size:4px;color:#444;margin-top:1px">Share</div></div>
-      </div>
-    </div>
-  </div>
-
-  </div><!-- close hero-right -->
-  </div><!-- close hero-split -->
-</section>
-
-<!-- ═══ ROW 1: Character stats graphic + copy ═══ -->
-<div class="row">
-  <div class="row-graphic">
-    <!-- Stat radar / character card graphic -->
-    <div style="max-width:280px;margin:0 auto;background:linear-gradient(155deg,#0e0e1a,#06060C 40%);border-radius:18px;padding:18px 14px;border:1px solid rgba(201,169,110,.12);position:relative;overflow:hidden">
-      <div style="position:absolute;top:0;left:0;width:24px;height:24px;border-top:1.5px solid rgba(201,169,110,.12);border-left:1.5px solid rgba(201,169,110,.12);border-radius:18px 0 0 0"></div>
-      <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;border-bottom:1.5px solid rgba(201,169,110,.12);border-right:1.5px solid rgba(201,169,110,.12);border-radius:0 0 18px 0"></div>
-      <div style="text-align:center;margin-bottom:10px">
-        <div style="width:40px;height:40px;border-radius:10px;margin:0 auto 5px;background:linear-gradient(135deg,rgba(201,169,110,.15),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">A</div>
-        <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:#E8E0D4">Alex Rivera</div>
-        <div style="color:#C9A96E;font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px">Night Owl Explorer · Level 7</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🔥</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Social</span><span style="color:#FF6B5A;font-size:8px;font-weight:800;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:30%;height:100%;border-radius:2px;background:#FF6B5A;box-shadow:0 0 4px rgba(255,107,90,.3)"></div></div></div></div>
-        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🌿</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Explore</span><span style="color:#50D890;font-size:8px;font-weight:800;font-family:'Cinzel',serif">10</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:55%;height:100%;border-radius:2px;background:#50D890;box-shadow:0 0 4px rgba(80,216,144,.3)"></div></div></div></div>
-        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🎨</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Create</span><span style="color:#FFB347;font-size:8px;font-weight:800;font-family:'Cinzel',serif">6</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:72%;height:100%;border-radius:2px;background:#FFB347;box-shadow:0 0 4px rgba(255,179,71,.3)"></div></div></div></div>
-        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">💪</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Physical</span><span style="color:#D47BFF;font-size:8px;font-weight:800;font-family:'Cinzel',serif">8</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:25%;height:100%;border-radius:2px;background:#D47BFF;box-shadow:0 0 4px rgba(212,123,255,.3)"></div></div></div></div>
-        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">🍳</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Culinary</span><span style="color:#E8B84B;font-size:8px;font-weight:800;font-family:'Cinzel',serif">5</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:48%;height:100%;border-radius:2px;background:#E8B84B;box-shadow:0 0 4px rgba(232,184,75,.3)"></div></div></div></div>
-        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:8px;width:14px;text-align:center">📚</span><div style="flex:1"><div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="color:#888;font-size:7px">Knowledge</span><span style="color:#5B9FFF;font-size:8px;font-weight:800;font-family:'Cinzel',serif">4</span></div><div style="background:rgba(255,255,255,.05);border-radius:2px;height:3px"><div style="width:15%;height:100%;border-radius:2px;background:#5B9FFF;box-shadow:0 0 4px rgba(91,159,255,.3)"></div></div></div></div>
-      </div>
-    </div>
-  </div>
-  <div class="row-text">
-    <div class="s-label">Your Character Sheet</div>
-    <div class="s-title">6 Stats. One <em>You</em>.</div>
-    <div class="s-sub">Track Social, Explore, Create, Physical, Culinary, and Knowledge. Every quest you complete levels up the stat that matters. Your weakest stat gets the most quests.</div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ═══ ROW 2: Quest cards graphic + copy (reversed) ═══ -->
-<div class="row row-reverse">
-  <div class="row-graphic">
-    <div style="max-width:300px;margin:0 auto">
-      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">
-        <div style="display:flex;align-items:center;gap:3px;background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.1);border-radius:6px;padding:3px 7px"><span style="font-size:7px">🎯</span><span style="color:#C9A96E;font-size:7px;font-weight:600">For Damien</span></div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:6px;padding:3px 7px"><span style="color:#777;font-size:7px">📍 Phoenix, AZ</span></div>
-        <div style="border:1px solid rgba(255,255,255,.05);border-radius:6px;padding:3px 7px"><span style="color:#777;font-size:7px">☀️ 78°F</span></div>
-      </div>
-      <div class="quest-g"><div class="quest-g-icon" style="background:rgba(255,107,90,.1);border:1.5px solid rgba(255,107,90,.15)">🔥</div><div style="flex:1"><div class="quest-g-title">Have a 30-min conversation with a stranger</div><div class="quest-g-why">🎯 Your Social is your lowest stat</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(255,107,90,.1);color:#FF6B5A">Social</span><span class="quest-g-tag" style="background:rgba(255,107,90,.1);color:#FF6B5A">Hard</span><span style="color:#444;font-size:7px">📍 Coffee shops</span></div></div><span class="quest-g-xp">+80</span></div>
-      <div class="quest-g"><div class="quest-g-icon" style="background:rgba(80,216,144,.1);border:1.5px solid rgba(80,216,144,.15)">🌿</div><div style="flex:1"><div class="quest-g-title">Visit a neighborhood you've never explored</div><div class="quest-g-why">🎯 No Explore quest in 8 days</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(80,216,144,.1);color:#50D890">Explore</span><span class="quest-g-tag" style="background:rgba(255,179,71,.1);color:#FFB347">Medium</span><span style="color:#444;font-size:7px">📍 Roosevelt Row</span></div></div><span class="quest-g-xp">+55</span></div>
-      <div class="quest-g"><div class="quest-g-icon" style="background:rgba(212,123,255,.1);border:1.5px solid rgba(212,123,255,.15)">💪</div><div style="flex:1"><div class="quest-g-title">Run 1 mile faster than your last time</div><div class="quest-g-why">🎯 Chain 3/5 — unlock Speed Demon</div><div class="quest-g-tags"><span class="quest-g-tag" style="background:rgba(212,123,255,.1);color:#D47BFF">Physical</span><span class="quest-g-tag" style="background:rgba(255,179,71,.1);color:#FFB347">Medium</span><span style="color:#444;font-size:7px">☀️ Good weather</span></div></div><span class="quest-g-xp">+50</span></div>
-    </div>
-  </div>
-  <div class="row-text">
-    <div class="s-label">Quest Log</div>
-    <div class="s-title">Quests That Know <em>Your Life</em></div>
-    <div class="s-sub">Every quest adapts to your city, weather, budget, and the stats you need to level up. A night owl in Phoenix gets different quests than a morning person in Portland.</div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ═══ ROW 3: Share card + badges graphic + copy ═══ -->
-<div class="row">
-  <div class="row-graphic">
-    <div style="max-width:280px;margin:0 auto;background:linear-gradient(155deg,#0e0e1a,#06060C 40%);border-radius:18px;padding:18px 14px;border:1px solid rgba(201,169,110,.12);position:relative;overflow:hidden">
-      <div style="position:absolute;top:0;left:0;width:24px;height:24px;border-top:1.5px solid rgba(201,169,110,.12);border-left:1.5px solid rgba(201,169,110,.12);border-radius:18px 0 0 0"></div>
-      <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;border-bottom:1.5px solid rgba(201,169,110,.12);border-right:1.5px solid rgba(201,169,110,.12);border-radius:0 0 18px 0"></div>
-      <div style="text-align:center;margin-bottom:10px">
-        <div style="width:40px;height:40px;border-radius:10px;margin:0 auto 5px;background:linear-gradient(135deg,rgba(201,169,110,.15),rgba(201,169,110,.04));border:1.5px solid rgba(201,169,110,.2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#C9A96E;font-family:'Cinzel',serif">D</div>
-        <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:#E8E0D4">Damien Smith</div>
-        <div style="color:#C9A96E;font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px">Urban Pathfinder · Level 5</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">
-        <div style="text-align:center;background:rgba(107,138,122,.05);border:1px solid rgba(107,138,122,.08);border-radius:8px;padding:8px 4px"><div style="font-size:18px;margin-bottom:2px">🗺️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700">Trailblazer</div><div style="color:#6B8A7A;font-size:4px;font-weight:600;margin-top:1px">COMMON</div></div>
-        <div style="text-align:center;background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.1);border-radius:8px;padding:8px 4px"><div style="font-size:18px;margin-bottom:2px">👨‍🍳</div><div style="color:#E8E0D4;font-size:6px;font-weight:700">Midnight Chef</div><div style="color:#C9A96E;font-size:4px;font-weight:600;margin-top:1px">RARE</div></div>
-        <div style="text-align:center;background:rgba(212,123,255,.05);border:1px solid rgba(212,123,255,.1);border-radius:8px;padding:8px 4px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,123,255,.04),transparent);background-size:200% 100%;animation:shimmer 4s linear infinite"></div><div style="font-size:18px;margin-bottom:2px;position:relative">⚔️</div><div style="color:#E8E0D4;font-size:6px;font-weight:700;position:relative">Founder</div><div style="color:#D47BFF;font-size:4px;font-weight:600;margin-top:1px;position:relative">LEGENDARY</div></div>
-      </div>
-      <div style="text-align:center;color:rgba(201,169,110,.15);font-size:6px;font-weight:700;font-family:'Cinzel',serif;letter-spacing:3px;text-transform:uppercase;padding-top:6px;border-top:1px solid rgba(255,255,255,.03)">lore</div>
-    </div>
-  </div>
-  <div class="row-text">
-    <div class="s-label">Built to Share</div>
-    <div class="s-title">More Than Your Routine.<br>This Is <em>Who You Are</em>.</div>
-    <div class="s-sub">Share your character card like a Spotify Wrapped. Unlock rare badges like Midnight Chef, Conversation Alchemist, and Urban Cartographer. Flexes that mean something.</div>
-  </div>
-</div>
-
-<!-- ═══ BOTTOM CTA ═══ -->
-<section class="bot">
-  <div class="s-title" style="text-align:center;font-family:'Cinzel',serif">Your Quest Log Is Already Being Built.<br><em>Claim Your Spot.</em></div>
-  <p style="color:#555;font-size:12px;margin:8px auto 20px;max-width:360px;text-align:center;line-height:1.5">First 1,000 adventurers get a Founder Badge that can never be earned again.</p>
-  <button class="join-btn" onclick="openTally()">Join Waitlist ⚔️</button>
-</section>
-
-<footer>
-  <div class="f-logo">LORE</div>
-  <p>Your life is an open world.</p>
-</footer>
-
-<!-- Tally popup -->
-<div id="tally-bg" onclick="if(event.target===this){this.style.display='none';document.body.style.overflow=''}" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;backdrop-filter:blur(6px)">
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:420px;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.7)">
-    <div onclick="document.getElementById('tally-bg').style.display='none';document.body.style.overflow=''" style="position:absolute;top:10px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.06);color:#666;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10">×</div>
-    <iframe id="tally-frame" src="about:blank" width="100%" height="500" frameborder="0" style="display:block;background:#fff;border-radius:0 0 20px 20px" allow="payment"></iframe>
-  </div>
-</div>
-
-<script>
-var em=document.getElementById('embers');
-for(var i=0;i<10;i++){var e=document.createElement('div');e.style.cssText='position:absolute;border-radius:50%;background:hsl('+(35+Math.random()*10)+','+(55+Math.random()*18)+'%,'+(55+Math.random()*18)+'%);left:'+(12+Math.random()*76)+'%;top:'+(18+Math.random()*55)+'%;width:'+(2+Math.random()*2)+'px;height:'+(2+Math.random()*2)+'px;animation:ember '+(2+Math.random()*3)+'s ease '+(i*.2)+'s infinite;opacity:0';em.appendChild(e)}
-var ct=document.getElementById('counter');var n=847;
-setInterval(function(){if(Math.random()>.7){n++;ct.textContent=n}},5000);
-function openTally(){var f=document.getElementById('tally-frame');if(f.src==='about:blank'||f.src===''){f.src='https://tally.so/r/5B2Zzb?hideTitle=0'}document.getElementById('tally-bg').style.display='block';document.body.style.overflow='hidden'}
-
-// Phone tab switching
-function switchTab(t){
-  var screens=['quests','char','badges','share'];
-  var tabs=['tab-quests','tab-char','tab-badges','tab-share'];
-  screens.forEach(function(s){document.getElementById('scr-'+s).style.display='none'});
-  tabs.forEach(function(tb){var el=document.getElementById(tb);el.style.opacity='.3';el.innerHTML=el.innerHTML.replace(/<div style="width:2px[^<]*<\/div>/,'')});
-  document.getElementById('scr-'+t).style.display='block';
-  var activeTab=document.getElementById('tab-'+t);
-  activeTab.style.opacity='1';
-  // Update tab label color
-  var label=activeTab.querySelectorAll('div')[1];
-  if(label){label.style.color='#C9A96E';label.style.fontWeight='600'}
-  // Add dot
-  var dot=document.createElement('div');
-  dot.style.cssText='width:2px;height:2px;border-radius:50%;background:#C9A96E;margin:1px auto 0';
-  activeTab.appendChild(dot);
-  // Reset other labels
-  tabs.forEach(function(tb){
-    if(tb!=='tab-'+t){var el=document.getElementById(tb);var lbl=el.querySelectorAll('div')[1];if(lbl){lbl.style.color='#444';lbl.style.fontWeight='400'}}
-  });
-}
-</script>
-</body>
-</html>
+  // Footer
+  footer: {
+    borderTop: "1px solid #2A2440",
+    padding: "32px 24px",
+    position: "relative",
+    zIndex: 1,
+  },
+  footerInner: {
+    maxWidth: 960,
+    margin: "0 auto",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 16,
+  },
+  footerText: {
+    fontSize: 13,
+    color: "#6B6175",
+    fontWeight: 300,
+  },
+  footerLinks: {
+    display: "flex",
+    gap: 20,
+  },
+  footerLink: {
+    fontSize: 13,
+    color: "#6B6175",
+    textDecoration: "none",
+    fontWeight: 300,
+  },
+};
