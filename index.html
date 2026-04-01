@@ -370,7 +370,7 @@
       <div class="logo-mark">L</div>
       <span class="logo-text">LORE</span>
     </a>
-    <a href="javascript:void(0)" onclick="Tally.openPopup('wMqOGx', { hideTitle: true, width: 400 })" class="nav-cta">Join Waitlist</a>
+    <a href="javascript:void(0)" onclick="openModal()" class="nav-cta">Join Waitlist</a>
   </div>
 </nav>
 
@@ -391,7 +391,7 @@
     </p>
 
     <div id="waitlist" class="form-wrap fade-up fade-up-d3">
-      <button class="cta-btn-large" onclick="Tally.openPopup('wMqOGx', { hideTitle: true, width: 400 })">Accept the Quest</button>
+      <button class="cta-btn-large" onclick="openModal()">Accept the Quest</button>
       <p class="form-note">No spam, only quests</p>
     </div>
   </div>
@@ -484,9 +484,17 @@
   <h2 class="final-heading">Ready to make life less boring?</h2>
   <p class="final-sub">Join the waitlist and be first in line when Lore launches.</p>
   <div class="form-wrap">
-    <button class="cta-btn-large" onclick="Tally.openPopup('wMqOGx', { hideTitle: true, width: 400 })">Join the Waitlist</button>
+    <button class="cta-btn-large" onclick="openModal()">Join the Waitlist</button>
   </div>
 </section>
+
+<!-- Modal with Tally form -->
+<div id="tallyModal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);">
+  <div style="position:relative; background:#1A1525; border:1px solid #2A2440; border-radius:16px; width:90%; max-width:440px; height:500px; overflow:hidden; box-shadow:0 24px 80px rgba(0,0,0,0.6);">
+    <button onclick="closeModal()" style="position:absolute; top:12px; right:12px; z-index:10; background:none; border:none; color:#8A8290; font-size:24px; cursor:pointer; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:8px; transition:all 0.2s;" onmouseover="this.style.color='#E8E2D6';this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.color='#8A8290';this.style.background='none'">&times;</button>
+    <iframe src="https://tally.so/r/wMqOGx?transparentBackground=1" width="100%" height="100%" frameborder="0" style="border:none;"></iframe>
+  </div>
+</div>
 
 <footer class="footer">
   <div class="footer-inner">
@@ -507,17 +515,31 @@
   // Scroll reveal
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+      if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.12 });
-
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
 
-<!-- Tally embed widget loader -->
-<script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+  // Modal
+  function openModal() {
+    const m = document.getElementById('tallyModal');
+    m.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    const m = document.getElementById('tallyModal');
+    m.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  // Close on backdrop click
+  document.getElementById('tallyModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  // Close on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
 
 </body>
 </html>
