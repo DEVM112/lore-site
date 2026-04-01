@@ -554,38 +554,61 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+  // ── Tally Form Submission ──
+  // Your Tally form ID - update this if it changes
+  const TALLY_FORM_ID = 'wMqOGx';
+
+  async function submitToTally(email) {
+    try {
+      const res = await fetch(`https://tally.so/r/${TALLY_FORM_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ email: email }),
+        mode: 'no-cors' // Tally doesn't support CORS from custom domains
+      });
+      // With no-cors we can't read the response, but the submission goes through
+      return true;
+    } catch (err) {
+      console.error('Tally submission error:', err);
+      // Fallback: open Tally form directly with email pre-filled
+      window.open(`https://tally.so/r/${TALLY_FORM_ID}?email=${encodeURIComponent(email)}`, '_blank');
+      return true;
+    }
+  }
+
+  function showSuccess() {
+    // Update hero form
+    document.getElementById('formRow').style.display = 'none';
+    document.getElementById('formNote').style.display = 'none';
+    document.getElementById('successMsg').classList.add('show');
+    // Update bottom form
+    document.getElementById('formRow2').style.display = 'none';
+    document.getElementById('alreadyIn').style.display = 'block';
+  }
+
   // Form submission - hero
-  function handleSubmit() {
-    const email = document.getElementById('emailInput').value;
-    if (!email || !email.includes('@')) return;
+  async function handleSubmit() {
+    const input = document.getElementById('emailInput');
+    const email = input.value.trim();
+    if (!email || !email.includes('@') || !email.includes('.')) return;
 
     const btn = document.getElementById('submitBtn');
     btn.textContent = 'Enrolling...';
     btn.disabled = true;
+    btn.style.opacity = '0.7';
 
-    setTimeout(() => {
-      document.getElementById('formRow').style.display = 'none';
-      document.getElementById('formNote').style.display = 'none';
-      document.getElementById('successMsg').classList.add('show');
-
-      // Also update bottom form
-      document.getElementById('formRow2').style.display = 'none';
-      document.getElementById('alreadyIn').style.display = 'block';
-    }, 1200);
+    await submitToTally(email);
+    showSuccess();
   }
 
   // Form submission - bottom
-  function handleSubmit2() {
-    const email = document.getElementById('emailInput2').value;
-    if (!email || !email.includes('@')) return;
+  async function handleSubmit2() {
+    const input = document.getElementById('emailInput2');
+    const email = input.value.trim();
+    if (!email || !email.includes('@') || !email.includes('.')) return;
 
-    document.getElementById('formRow2').style.display = 'none';
-    document.getElementById('alreadyIn').style.display = 'block';
-
-    // Also update hero form
-    document.getElementById('formRow').style.display = 'none';
-    document.getElementById('formNote').style.display = 'none';
-    document.getElementById('successMsg').classList.add('show');
+    await submitToTally(email);
+    showSuccess();
   }
 
   // Enter key support
