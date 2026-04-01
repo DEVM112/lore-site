@@ -1,13 +1,83 @@
 import { useState, useEffect, useRef } from "react";
 
-const TALLY_FORM_ID = "5B2Zzb"; // Replace with your actual Tally form ID
-
 export default function LoreLanding() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visibleSections, setVisibleSections] = useState(new Set(["hero"]));
   const sectionRefs = useRef({});
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href = "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+
+    const styleEl = document.createElement("style");
+    styleEl.textContent = `
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes glowPulse {
+        0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.15), 0 0 60px rgba(201,168,76,0.05); }
+        50% { box-shadow: 0 0 30px rgba(201,168,76,0.25), 0 0 80px rgba(201,168,76,0.1); }
+      }
+      @keyframes visorGlow {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+      @keyframes shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes checkDraw {
+        from { stroke-dashoffset: 24; }
+        to { stroke-dashoffset: 0; }
+      }
+      input::placeholder { color: #6B6175; }
+      input:focus {
+        outline: none;
+        border-color: #C9A84C !important;
+        box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+      }
+      .cta-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 24px rgba(201,168,76,0.3) !important;
+      }
+      .cta-btn:active { transform: translateY(0); }
+      .benefit-card:hover {
+        border-color: #C9A84C !important;
+        background: rgba(201,168,76,0.04) !important;
+      }
+      .social-proof-num {
+        background: linear-gradient(135deg, #C9A84C, #E8D5A0, #C9A84C);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 3s linear infinite;
+      }
+      @media (max-width: 640px) {
+        .benefits-grid { grid-template-columns: 1fr !important; }
+        .hero-heading { font-size: 36px !important; line-height: 1.15 !important; }
+        .hero-sub { font-size: 17px !important; }
+        .form-row { flex-direction: column !important; }
+        .form-row input { border-radius: 10px !important; }
+        .form-row button { border-radius: 10px !important; width: 100% !important; }
+        .steps-grid { grid-template-columns: 1fr !important; }
+      }
+    `;
+    document.head.appendChild(styleEl);
+    return () => {
+      document.head.removeChild(link);
+      document.head.removeChild(styleEl);
+    };
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -20,11 +90,9 @@ export default function LoreLanding() {
       },
       { threshold: 0.15 }
     );
-
     Object.values(sectionRefs.current).forEach((ref) => {
       if (ref) observer.observe(ref);
     });
-
     return () => observer.disconnect();
   }, []);
 
@@ -38,395 +106,167 @@ export default function LoreLanding() {
   };
 
   const isVisible = (id) => visibleSections.has(id);
+  const revealStyle = (id) => ({
+    opacity: isVisible(id) ? 1 : 0,
+    transform: isVisible(id) ? "translateY(0)" : "translateY(40px)",
+    transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)",
+  });
 
   return (
-    <div style={styles.page}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes glowPulse {
-          0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,0.15), 0 0 60px rgba(201,168,76,0.05); }
-          50% { box-shadow: 0 0 30px rgba(201,168,76,0.25), 0 0 80px rgba(201,168,76,0.1); }
-        }
-        @keyframes visorGlow {
-          0%, 100% { opacity: 0.7; }
-          50% { opacity: 1; }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
-        }
-        @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
-        }
-        @keyframes runeRotate {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes checkDraw {
-          from { stroke-dashoffset: 24; }
-          to { stroke-dashoffset: 0; }
-        }
-        
-        .section-reveal {
-          opacity: 0;
-          transform: translateY(40px);
-          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .section-reveal.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        
-        input::placeholder {
-          color: #6B6175;
-        }
-        input:focus {
-          outline: none;
-          border-color: #C9A84C !important;
-          box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
-        }
-        
-        .cta-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 6px 24px rgba(201,168,76,0.3) !important;
-        }
-        .cta-btn:active {
-          transform: translateY(0);
-        }
-        
-        .benefit-card:hover {
-          border-color: #C9A84C !important;
-          background: rgba(201,168,76,0.04) !important;
-        }
-        
-        .social-proof-num {
-          background: linear-gradient(135deg, #C9A84C, #E8D5A0, #C9A84C);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: shimmer 3s linear infinite;
-        }
-
-        @media (max-width: 640px) {
-          .benefits-grid { grid-template-columns: 1fr !important; }
-          .hero-heading { font-size: 36px !important; line-height: 1.15 !important; }
-          .hero-sub { font-size: 17px !important; }
-          .form-row { flex-direction: column !important; }
-          .form-row input { border-radius: 10px !important; }
-          .form-row button { border-radius: 10px !important; width: 100% !important; }
-        }
-      `}</style>
-
-      {/* Ambient Background */}
-      <div style={styles.ambientBg}>
-        <div style={styles.radialGlow1} />
-        <div style={styles.radialGlow2} />
-        <div style={styles.noiseOverlay} />
+    <div style={S.page}>
+      <div style={S.ambientBg}>
+        <div style={S.radialGlow1} />
+        <div style={S.radialGlow2} />
       </div>
 
-      {/* Nav */}
-      <nav style={styles.nav}>
-        <div style={styles.navInner}>
-          <div style={styles.logoWrap}>
-            <div style={styles.logoMark}>L</div>
-            <span style={styles.logoText}>LORE</span>
+      <nav style={S.nav}>
+        <div style={S.navInner}>
+          <div style={S.logoWrap}>
+            <div style={S.logoMark}>L</div>
+            <span style={S.logoText}>LORE</span>
           </div>
-          <a href="#waitlist" style={styles.navCta}>Join Waitlist</a>
+          <a href="#waitlist" style={S.navCta}>Join Waitlist</a>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section
-        ref={(el) => (sectionRefs.current.hero = el)}
-        data-section="hero"
-        style={styles.hero}
-      >
-        <div style={{
-          maxWidth: 720,
-          margin: "0 auto",
-          textAlign: "center",
-          animation: "fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-        }}>
-          <div style={styles.badge}>
-            <div style={styles.badgeDot} />
+      <section ref={(el) => (sectionRefs.current.hero = el)} data-section="hero" style={S.hero}>
+        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", animation: "fadeUp 1s cubic-bezier(0.16,1,0.3,1) forwards" }}>
+          <div style={S.badge}>
+            <div style={S.badgeDot} />
             Something new is coming
           </div>
 
-          <h1 className="hero-heading" style={styles.heroHeading}>
-            Your real life is the game.
-            <br />
-            <span style={styles.heroAccent}>Start playing it.</span>
+          <h1 className="hero-heading" style={S.heroHeading}>
+            Your real life is the game.<br />
+            <span style={S.heroAccent}>Start playing it.</span>
           </h1>
 
-          <p className="hero-sub" style={styles.heroSub}>
+          <p className="hero-sub" style={S.heroSub}>
             Lore generates personalized side quests tailored to your city, your interests, and your initial responses. Quests push you out of your comfort zone and make everyday life less boring. Play solo or link up with others who want the same thing.
           </p>
 
-          {/* CTA Form */}
-          <div id="waitlist" style={styles.formSection}>
+          <div id="waitlist" style={S.formSection}>
             {!submitted ? (
               <>
-                <div className="form-row" style={styles.formRow}>
+                <div className="form-row" style={S.formRow}>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
                     placeholder="Enter your email to join the quest"
-                    style={styles.emailInput}
+                    style={S.emailInput}
                   />
-                  <button
-                    className="cta-btn"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    style={{
-                      ...styles.ctaButton,
-                      opacity: isSubmitting ? 0.7 : 1,
-                    }}
-                  >
+                  <button className="cta-btn" onClick={handleSubmit} disabled={isSubmitting} style={{ ...S.ctaButton, opacity: isSubmitting ? 0.7 : 1 }}>
                     {isSubmitting ? (
                       <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <svg width="16" height="16" viewBox="0 0 16 16" style={{ animation: "runeRotate 1s linear infinite" }}>
-                          <circle cx="8" cy="8" r="6" stroke="#0C0A13" strokeWidth="2" fill="none" strokeDasharray="20 12"/>
+                        <svg width="16" height="16" viewBox="0 0 16 16" style={{ animation: "spin 1s linear infinite" }}>
+                          <circle cx="8" cy="8" r="6" stroke="#0C0A13" strokeWidth="2" fill="none" strokeDasharray="20 12" />
                         </svg>
                         Enrolling...
                       </span>
-                    ) : (
-                      "Accept the Quest"
-                    )}
+                    ) : "Accept the Quest"}
                   </button>
                 </div>
-                <p style={styles.formNote}>
-                  No spam, only quests
-                </p>
+                <p style={S.formNote}>No spam, only quests</p>
               </>
             ) : (
-              <div style={styles.successState}>
-                <div style={styles.successIcon}>
+              <div style={S.successState}>
+                <div style={{ marginBottom: 16 }}>
                   <svg width="32" height="32" viewBox="0 0 32 32">
-                    <circle cx="16" cy="16" r="14" fill="none" stroke="#C9A84C" strokeWidth="1.5"/>
-                    <path d="M10 16L14 20L22 12" stroke="#C9A84C" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" style={{ animation: "checkDraw 0.6s ease-out forwards" }}/>
+                    <circle cx="16" cy="16" r="14" fill="none" stroke="#C9A84C" strokeWidth="1.5" />
+                    <path d="M10 16L14 20L22 12" stroke="#C9A84C" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" style={{ animation: "checkDraw 0.6s ease-out forwards" }} />
                   </svg>
                 </div>
-                <h3 style={styles.successTitle}>You're in.</h3>
-                <p style={styles.successText}>
-                  You're on the list. Watch your inbox for your first quest briefing.
-                </p>
+                <h3 style={S.successTitle}>You're in.</h3>
+                <p style={S.successText}>You're on the list. Watch your inbox for your first quest briefing.</p>
               </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section
-        ref={(el) => (sectionRefs.current.how = el)}
-        data-section="how"
-        className={`section-reveal ${isVisible("how") ? "visible" : ""}`}
-        style={styles.section}
-      >
-        <p style={styles.sectionLabel}>How it works</p>
-        <h2 style={styles.sectionHeading}>Three steps. Zero grind.</h2>
-
-        <div style={styles.stepsWrap}>
+      <section ref={(el) => (sectionRefs.current.how = el)} data-section="how" style={{ ...S.section, ...revealStyle("how") }}>
+        <p style={S.sectionLabel}>How it works</p>
+        <h2 style={S.sectionHeading}>Three steps. Zero grind.</h2>
+        <div className="steps-grid" style={S.stepsWrap}>
           {[
-            {
-              num: "I",
-              title: "Set up your profile",
-              desc: "Answer a few questions about your interests, your city, and what kind of experiences you're looking for. Lore uses your responses to tailor every quest to you.",
-              icon: "📜",
-            },
-            {
-              num: "II",
-              title: "Get quests built for you",
-              desc: "Receive side quests based on where you live, what you're into, and how far outside your comfort zone you want to go. No two players get the same experience.",
-              icon: "⚔️",
-            },
-            {
-              num: "III",
-              title: "Level up for real",
-              desc: "Complete quests, earn XP, and level up your character. Run solo or join multiplayer quest lines and meet people who are on the same mission.",
-              icon: "✨",
-            },
+            { num: "I", title: "Set up your profile", desc: "Answer a few questions about your interests, your city, and what kind of experiences you're looking for. Lore uses your responses to tailor every quest to you.", icon: "📜" },
+            { num: "II", title: "Get quests built for you", desc: "Receive side quests based on where you live, what you're into, and how far outside your comfort zone you want to go. No two players get the same experience.", icon: "⚔️" },
+            { num: "III", title: "Level up for real", desc: "Complete quests, earn XP, and level up your character. Run solo or join multiplayer quest lines and meet people who are on the same mission.", icon: "✨" },
           ].map((step, i) => (
-            <div
-              key={i}
-              style={{
-                ...styles.stepCard,
-                transitionDelay: `${i * 150}ms`,
-              }}
-            >
-              <div style={styles.stepNum}>{step.num}</div>
-              <div style={styles.stepIcon}>{step.icon}</div>
-              <h3 style={styles.stepTitle}>{step.title}</h3>
-              <p style={styles.stepDesc}>{step.desc}</p>
+            <div key={i} style={S.stepCard}>
+              <div style={S.stepNum}>{step.num}</div>
+              <div style={S.stepIcon}>{step.icon}</div>
+              <h3 style={S.stepTitle}>{step.title}</h3>
+              <p style={S.stepDesc}>{step.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* BENEFITS */}
-      <section
-        ref={(el) => (sectionRefs.current.benefits = el)}
-        data-section="benefits"
-        className={`section-reveal ${isVisible("benefits") ? "visible" : ""}`}
-        style={{ ...styles.section, paddingTop: 40 }}
-      >
-        <p style={styles.sectionLabel}>Why join the waitlist</p>
-        <h2 style={styles.sectionHeading}>Early adventurers get rewarded</h2>
-
-        <div className="benefits-grid" style={styles.benefitsGrid}>
+      <section ref={(el) => (sectionRefs.current.benefits = el)} data-section="benefits" style={{ ...S.section, paddingTop: 40, ...revealStyle("benefits") }}>
+        <p style={S.sectionLabel}>Why join the waitlist</p>
+        <h2 style={S.sectionHeading}>Early adventurers get rewarded</h2>
+        <div className="benefits-grid" style={S.benefitsGrid}>
           {[
-            {
-              icon: "🗡️",
-              title: "First access to the app",
-              desc: "Be among the first to play when Lore launches. Waitlist members get priority onboarding before public release.",
-            },
-            {
-              icon: "🛡️",
-              title: "Shape the product",
-              desc: "Your feedback directly influences what we build. Early users become founding members of the Lore community.",
-            },
-            {
-              icon: "👑",
-              title: "Founder's badge & bonus XP",
-              desc: "Exclusive in-app badge and a permanent XP boost that no one else will ever be able to earn. Ever.",
-            },
-            {
-              icon: "🔮",
-              title: "Exclusive quest lines",
-              desc: "Founder-only epic quest chains that tell a unique story, locked permanently after launch.",
-            },
+            { icon: "🗡️", title: "First access to the app", desc: "Be among the first to play when Lore launches. Waitlist members get priority onboarding before public release." },
+            { icon: "🛡️", title: "Shape the product", desc: "Your feedback directly influences what we build. Early users become founding members of the Lore community." },
+            { icon: "👑", title: "Founder's badge & bonus XP", desc: "Exclusive in-app badge and a permanent XP boost that no one else will ever be able to earn. Ever." },
+            { icon: "🔮", title: "Exclusive quest lines", desc: "Founder-only epic quest chains that tell a unique story, locked permanently after launch." },
           ].map((b, i) => (
-            <div
-              key={i}
-              className="benefit-card"
-              style={{
-                ...styles.benefitCard,
-                transitionDelay: `${i * 100}ms`,
-              }}
-            >
-              <div style={styles.benefitIcon}>{b.icon}</div>
-              <h3 style={styles.benefitTitle}>{b.title}</h3>
-              <p style={styles.benefitDesc}>{b.desc}</p>
+            <div key={i} className="benefit-card" style={S.benefitCard}>
+              <div style={S.benefitIcon}>{b.icon}</div>
+              <h3 style={S.benefitTitle}>{b.title}</h3>
+              <p style={S.benefitDesc}>{b.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SOCIAL PROOF / URGENCY */}
-      <section
-        ref={(el) => (sectionRefs.current.proof = el)}
-        data-section="proof"
-        className={`section-reveal ${isVisible("proof") ? "visible" : ""}`}
-        style={styles.proofSection}
-      >
-        <div style={styles.proofInner}>
-          <div style={styles.proofStats}>
-            <div style={styles.proofStat}>
-              <span className="social-proof-num" style={styles.proofNum}>Spring '26</span>
-              <span style={styles.proofLabel}>target launch</span>
+      <section ref={(el) => (sectionRefs.current.proof = el)} data-section="proof" style={{ ...S.proofSection, ...revealStyle("proof") }}>
+        <div style={S.proofInner}>
+          <div style={S.proofStats}>
+            <div style={S.proofStat}>
+              <span className="social-proof-num" style={S.proofNum}>Spring '26</span>
+              <span style={S.proofLabel}>target launch</span>
             </div>
-            <div style={styles.proofDivider} />
-            <div style={styles.proofStat}>
-              <span className="social-proof-num" style={styles.proofNum}>Closing soon</span>
-              <span style={styles.proofLabel}>limited early access</span>
+            <div style={S.proofDivider} />
+            <div style={S.proofStat}>
+              <span className="social-proof-num" style={S.proofNum}>Closing soon</span>
+              <span style={S.proofLabel}>limited early access</span>
             </div>
           </div>
-
-          <p style={styles.proofNote}>
-            Early access spots are almost full. Get on the list before we close sign-ups.
-          </p>
-
-          {/* Progress Bar */}
+          <p style={S.proofNote}>Early access spots are almost full. Get on the list before we close sign-ups.</p>
           <div style={{ marginTop: 24 }}>
-            <div style={{
-              width: "100%",
-              height: 8,
-              borderRadius: 100,
-              background: "#1A1525",
-              overflow: "hidden",
-            }}>
-              <div style={{
-                width: "80%",
-                height: "100%",
-                borderRadius: 100,
-                background: "linear-gradient(90deg, #8B7333, #C9A84C, #E8D5A0)",
-                transition: "width 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
-              }} />
+            <div style={{ width: "100%", height: 8, borderRadius: 100, background: "#1A1525", overflow: "hidden" }}>
+              <div style={{ width: "80%", height: "100%", borderRadius: 100, background: "linear-gradient(90deg, #8B7333, #C9A84C, #E8D5A0)" }} />
             </div>
-            <p style={{
-              marginTop: 10,
-              fontSize: 13,
-              color: "#C9A84C",
-              fontWeight: 500,
-            }}>
+            <p style={{ marginTop: 10, fontSize: 13, color: "#C9A84C", fontWeight: 500, fontFamily: "'Crimson Pro', Georgia, serif" }}>
               Waitlist closing soon
             </p>
           </div>
         </div>
       </section>
 
-      {/* CHRONICLER QUOTE */}
-      <section
-        ref={(el) => (sectionRefs.current.quote = el)}
-        data-section="quote"
-        className={`section-reveal ${isVisible("quote") ? "visible" : ""}`}
-        style={styles.quoteSection}
-      >
-        <div style={styles.quoteInner}>
-          <div style={styles.quoteBar} />
-          <blockquote style={styles.quoteText}>
+      <section ref={(el) => (sectionRefs.current.quote = el)} data-section="quote" style={{ ...S.quoteSection, ...revealStyle("quote") }}>
+        <div style={S.quoteInner}>
+          <div style={S.quoteBar} />
+          <blockquote style={S.quoteText}>
             "Most people talk about doing more with their time. Lore actually gives you a reason to. The only question is, are you in?"
           </blockquote>
-          <p style={styles.quoteAttrib}>The Lore Team</p>
+          <p style={S.quoteAttrib}>The Lore Team</p>
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section
-        ref={(el) => (sectionRefs.current.finalcta = el)}
-        data-section="finalcta"
-        className={`section-reveal ${isVisible("finalcta") ? "visible" : ""}`}
-        style={styles.finalCta}
-      >
-        <h2 style={styles.finalHeading}>Ready to make life less boring?</h2>
-        <p style={styles.finalSub}>
-          Join the waitlist and be first in line when Lore launches.
-        </p>
-
+      <section ref={(el) => (sectionRefs.current.finalcta = el)} data-section="finalcta" style={{ ...S.finalCta, ...revealStyle("finalcta") }}>
+        <h2 style={S.finalHeading}>Ready to make life less boring?</h2>
+        <p style={S.finalSub}>Join the waitlist and be first in line when Lore launches.</p>
         {!submitted ? (
           <div style={{ maxWidth: 440, margin: "0 auto" }}>
-            <div className="form-row" style={styles.formRow}>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                placeholder="Your email address"
-                style={styles.emailInput}
-              />
-              <button
-                className="cta-btn"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                style={{
-                  ...styles.ctaButton,
-                  opacity: isSubmitting ? 0.7 : 1,
-                }}
-              >
+            <div className="form-row" style={S.formRow}>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSubmit()} placeholder="Your email address" style={S.emailInput} />
+              <button className="cta-btn" onClick={handleSubmit} disabled={isSubmitting} style={{ ...S.ctaButton, opacity: isSubmitting ? 0.7 : 1 }}>
                 {isSubmitting ? "Enrolling..." : "Join the Waitlist"}
               </button>
             </div>
@@ -438,20 +278,17 @@ export default function LoreLanding() {
         )}
       </section>
 
-      {/* Footer */}
-      <footer style={styles.footer}>
-        <div style={styles.footerInner}>
-          <div style={styles.logoWrap}>
-            <div style={{ ...styles.logoMark, width: 28, height: 28, fontSize: 14 }}>L</div>
-            <span style={{ ...styles.logoText, fontSize: 14 }}>LORE</span>
+      <footer style={S.footer}>
+        <div style={S.footerInner}>
+          <div style={S.logoWrap}>
+            <div style={{ ...S.logoMark, width: 28, height: 28, fontSize: 14 }}>L</div>
+            <span style={{ ...S.logoText, fontSize: 14 }}>LORE</span>
           </div>
-          <p style={styles.footerText}>
-            © 2026 Lore. Your life, gamified.
-          </p>
-          <div style={styles.footerLinks}>
-            <a href="#" style={styles.footerLink}>Privacy</a>
-            <a href="#" style={styles.footerLink}>Terms</a>
-            <a href="https://instagram.com/damien.explores" target="_blank" rel="noopener" style={styles.footerLink}>Instagram</a>
+          <p style={S.footerText}>© 2026 Lore. Your life, gamified.</p>
+          <div style={S.footerLinks}>
+            <a href="#" style={S.footerLink}>Privacy</a>
+            <a href="#" style={S.footerLink}>Terms</a>
+            <a href="https://instagram.com/damien.explores" target="_blank" rel="noopener" style={S.footerLink}>Instagram</a>
           </div>
         </div>
       </footer>
@@ -459,461 +296,64 @@ export default function LoreLanding() {
   );
 }
 
-const styles = {
-  page: {
-    minHeight: "100vh",
-    background: "#0C0A13",
-    color: "#E8E2D6",
-    fontFamily: "'Crimson Pro', Georgia, serif",
-    position: "relative",
-    overflow: "hidden",
-  },
-  ambientBg: {
-    position: "fixed",
-    inset: 0,
-    pointerEvents: "none",
-    zIndex: 0,
-  },
-  radialGlow1: {
-    position: "absolute",
-    top: "-20%",
-    left: "30%",
-    width: "60vw",
-    height: "60vw",
-    borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)",
-  },
-  radialGlow2: {
-    position: "absolute",
-    bottom: "10%",
-    right: "20%",
-    width: "40vw",
-    height: "40vw",
-    borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(107,79,187,0.04) 0%, transparent 70%)",
-  },
-  noiseOverlay: {
-    position: "absolute",
-    inset: 0,
-    opacity: 0.03,
-    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
-    backgroundSize: "128px 128px",
-  },
-
-  // Nav
-  nav: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 100,
-    padding: "16px 24px",
-    background: "rgba(12,10,19,0.85)",
-    backdropFilter: "blur(16px)",
-    borderBottom: "1px solid rgba(42,36,64,0.5)",
-  },
-  navInner: {
-    maxWidth: 960,
-    margin: "0 auto",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  logoWrap: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-  },
-  logoMark: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    background: "linear-gradient(135deg, #C9A84C, #8B7333)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 16,
-    fontWeight: 700,
-    color: "#0C0A13",
-    fontFamily: "'Cinzel', Georgia, serif",
-  },
-  logoText: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 16,
-    fontWeight: 600,
-    color: "#C9A84C",
-    letterSpacing: 3,
-  },
-  navCta: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 12,
-    fontWeight: 600,
-    color: "#C9A84C",
-    textDecoration: "none",
-    padding: "8px 16px",
-    border: "1px solid rgba(201,168,76,0.3)",
-    borderRadius: 8,
-    letterSpacing: 1,
-    textTransform: "uppercase",
-  },
-
-  // Hero
-  hero: {
-    position: "relative",
-    zIndex: 1,
-    padding: "160px 24px 80px",
-    minHeight: "90vh",
-    display: "flex",
-    alignItems: "center",
-  },
-  badge: {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 8,
-    padding: "6px 16px",
-    borderRadius: 100,
-    border: "1px solid rgba(201,168,76,0.2)",
-    background: "rgba(201,168,76,0.05)",
-    fontSize: 13,
-    fontWeight: 400,
-    color: "#C9A84C",
-    marginBottom: 28,
-    fontFamily: "'Crimson Pro', Georgia, serif",
-    letterSpacing: 0.5,
-  },
-  badgeDot: {
-    width: 6,
-    height: 6,
-    borderRadius: "50%",
-    background: "#C9A84C",
-    animation: "visorGlow 2s ease-in-out infinite",
-  },
-  heroHeading: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 52,
-    fontWeight: 600,
-    lineHeight: 1.12,
-    color: "#E8E2D6",
-    marginBottom: 20,
-    letterSpacing: -0.5,
-  },
-  heroAccent: {
-    color: "#C9A84C",
-  },
-  heroSub: {
-    fontSize: 19,
-    lineHeight: 1.65,
-    color: "#8A8290",
-    maxWidth: 560,
-    margin: "0 auto 40px",
-    fontWeight: 300,
-  },
-
-  // Form
-  formSection: {
-    maxWidth: 480,
-    margin: "0 auto",
-  },
-  formRow: {
-    display: "flex",
-    gap: 0,
-    borderRadius: 12,
-    overflow: "hidden",
-    border: "1px solid #2A2440",
-    background: "#15121F",
-    animation: "glowPulse 4s ease-in-out infinite",
-  },
-  emailInput: {
-    flex: 1,
-    padding: "16px 20px",
-    fontSize: 15,
-    fontFamily: "'Crimson Pro', Georgia, serif",
-    background: "transparent",
-    border: "none",
-    color: "#E8E2D6",
-    minWidth: 0,
-  },
-  ctaButton: {
-    padding: "16px 28px",
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 13,
-    fontWeight: 600,
-    letterSpacing: 0.5,
-    background: "linear-gradient(135deg, #C9A84C, #B8963F)",
-    color: "#0C0A13",
-    border: "none",
-    cursor: "pointer",
-    whiteSpace: "nowrap",
-    transition: "all 0.2s",
-  },
-  formNote: {
-    marginTop: 14,
-    fontSize: 13,
-    color: "#6B6175",
-    fontWeight: 300,
-  },
-
-  // Success State
-  successState: {
-    textAlign: "center",
-    padding: "24px 0",
-    animation: "fadeUp 0.6s ease-out",
-  },
-  successIcon: {
-    marginBottom: 16,
-  },
-  successTitle: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 22,
-    fontWeight: 600,
-    color: "#C9A84C",
-    marginBottom: 8,
-  },
-  successText: {
-    fontSize: 16,
-    color: "#8A8290",
-    lineHeight: 1.6,
-    fontWeight: 300,
-  },
-
-  // Sections
-  section: {
-    position: "relative",
-    zIndex: 1,
-    padding: "80px 24px",
-    maxWidth: 960,
-    margin: "0 auto",
-  },
-  sectionLabel: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 12,
-    fontWeight: 600,
-    color: "#C9A84C",
-    letterSpacing: 3,
-    textTransform: "uppercase",
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  sectionHeading: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 32,
-    fontWeight: 600,
-    color: "#E8E2D6",
-    textAlign: "center",
-    marginBottom: 48,
-    lineHeight: 1.2,
-  },
-
-  // Steps
-  stepsWrap: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: 20,
-  },
-  stepCard: {
-    padding: "32px 24px",
-    background: "rgba(21,18,31,0.6)",
-    border: "1px solid #2A2440",
-    borderRadius: 14,
-    textAlign: "center",
-    position: "relative",
-  },
-  stepNum: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 11,
-    fontWeight: 700,
-    color: "#C9A84C",
-    letterSpacing: 2,
-    marginBottom: 16,
-    opacity: 0.6,
-  },
-  stepIcon: {
-    fontSize: 32,
-    marginBottom: 16,
-  },
-  stepTitle: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 16,
-    fontWeight: 600,
-    color: "#E8E2D6",
-    marginBottom: 10,
-  },
-  stepDesc: {
-    fontSize: 15,
-    lineHeight: 1.6,
-    color: "#8A8290",
-    fontWeight: 300,
-  },
-
-  // Benefits
-  benefitsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: 16,
-  },
-  benefitCard: {
-    padding: "28px 24px",
-    background: "rgba(21,18,31,0.4)",
-    border: "1px solid #2A2440",
-    borderRadius: 14,
-    transition: "all 0.3s",
-    cursor: "default",
-  },
-  benefitIcon: {
-    fontSize: 28,
-    marginBottom: 14,
-  },
-  benefitTitle: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 16,
-    fontWeight: 600,
-    color: "#E8E2D6",
-    marginBottom: 8,
-  },
-  benefitDesc: {
-    fontSize: 15,
-    lineHeight: 1.6,
-    color: "#8A8290",
-    fontWeight: 300,
-  },
-
-  // Social Proof
-  proofSection: {
-    position: "relative",
-    zIndex: 1,
-    padding: "60px 24px",
-  },
-  proofInner: {
-    maxWidth: 720,
-    margin: "0 auto",
-    padding: "40px 32px",
-    background: "rgba(21,18,31,0.5)",
-    border: "1px solid #2A2440",
-    borderRadius: 16,
-    textAlign: "center",
-  },
-  proofStats: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 32,
-    flexWrap: "wrap",
-    marginBottom: 20,
-  },
-  proofStat: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 4,
-  },
-  proofNum: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 28,
-    fontWeight: 700,
-  },
-  proofLabel: {
-    fontSize: 13,
-    color: "#6B6175",
-    fontWeight: 300,
-  },
-  proofDivider: {
-    width: 1,
-    height: 40,
-    background: "#2A2440",
-  },
-  proofNote: {
-    fontSize: 14,
-    color: "#8A8290",
-    fontWeight: 300,
-    fontStyle: "italic",
-  },
-
-  // Quote
-  quoteSection: {
-    position: "relative",
-    zIndex: 1,
-    padding: "60px 24px",
-  },
-  quoteInner: {
-    maxWidth: 600,
-    margin: "0 auto",
-    textAlign: "center",
-    position: "relative",
-  },
-  quoteBar: {
-    width: 40,
-    height: 2,
-    background: "#C9A84C",
-    margin: "0 auto 24px",
-    opacity: 0.4,
-  },
-  quoteText: {
-    fontFamily: "'Crimson Pro', Georgia, serif",
-    fontSize: 22,
-    fontStyle: "italic",
-    fontWeight: 300,
-    lineHeight: 1.6,
-    color: "#E8E2D6",
-    marginBottom: 16,
-  },
-  quoteAttrib: {
-    fontSize: 14,
-    color: "#C9A84C",
-    fontWeight: 500,
-    letterSpacing: 0.5,
-  },
-
-  // Final CTA
-  finalCta: {
-    position: "relative",
-    zIndex: 1,
-    padding: "80px 24px",
-    textAlign: "center",
-  },
-  finalHeading: {
-    fontFamily: "'Cinzel', Georgia, serif",
-    fontSize: 36,
-    fontWeight: 600,
-    color: "#E8E2D6",
-    marginBottom: 12,
-    lineHeight: 1.2,
-  },
-  finalSub: {
-    fontSize: 18,
-    color: "#8A8290",
-    fontWeight: 300,
-    marginBottom: 32,
-  },
-
-  // Footer
-  footer: {
-    borderTop: "1px solid #2A2440",
-    padding: "32px 24px",
-    position: "relative",
-    zIndex: 1,
-  },
-  footerInner: {
-    maxWidth: 960,
-    margin: "0 auto",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: 16,
-  },
-  footerText: {
-    fontSize: 13,
-    color: "#6B6175",
-    fontWeight: 300,
-  },
-  footerLinks: {
-    display: "flex",
-    gap: 20,
-  },
-  footerLink: {
-    fontSize: 13,
-    color: "#6B6175",
-    textDecoration: "none",
-    fontWeight: 300,
-  },
+const S = {
+  page: { minHeight: "100vh", background: "#0C0A13", color: "#E8E2D6", fontFamily: "'Crimson Pro', Georgia, serif", position: "relative", overflow: "hidden" },
+  ambientBg: { position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 },
+  radialGlow1: { position: "absolute", top: "-20%", left: "30%", width: "60vw", height: "60vw", borderRadius: "50%", background: "radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)" },
+  radialGlow2: { position: "absolute", bottom: "10%", right: "20%", width: "40vw", height: "40vw", borderRadius: "50%", background: "radial-gradient(circle, rgba(107,79,187,0.04) 0%, transparent 70%)" },
+  nav: { position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, padding: "16px 24px", background: "rgba(12,10,19,0.85)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(42,36,64,0.5)" },
+  navInner: { maxWidth: 960, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center" },
+  logoWrap: { display: "flex", alignItems: "center", gap: 10 },
+  logoMark: { width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg, #C9A84C, #8B7333)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "#0C0A13", fontFamily: "'Cinzel', Georgia, serif" },
+  logoText: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 16, fontWeight: 600, color: "#C9A84C", letterSpacing: 3 },
+  navCta: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 12, fontWeight: 600, color: "#C9A84C", textDecoration: "none", padding: "8px 16px", border: "1px solid rgba(201,168,76,0.3)", borderRadius: 8, letterSpacing: 1, textTransform: "uppercase" },
+  hero: { position: "relative", zIndex: 1, padding: "160px 24px 80px", minHeight: "90vh", display: "flex", alignItems: "center" },
+  badge: { display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px", borderRadius: 100, border: "1px solid rgba(201,168,76,0.2)", background: "rgba(201,168,76,0.05)", fontSize: 13, fontWeight: 400, color: "#C9A84C", marginBottom: 28, fontFamily: "'Crimson Pro', Georgia, serif", letterSpacing: 0.5 },
+  badgeDot: { width: 6, height: 6, borderRadius: "50%", background: "#C9A84C", animation: "visorGlow 2s ease-in-out infinite" },
+  heroHeading: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 52, fontWeight: 600, lineHeight: 1.12, color: "#E8E2D6", marginBottom: 20, letterSpacing: -0.5 },
+  heroAccent: { color: "#C9A84C" },
+  heroSub: { fontSize: 19, lineHeight: 1.65, color: "#8A8290", maxWidth: 560, margin: "0 auto 40px", fontWeight: 300 },
+  formSection: { maxWidth: 480, margin: "0 auto" },
+  formRow: { display: "flex", gap: 0, borderRadius: 12, overflow: "hidden", border: "1px solid #2A2440", background: "#15121F", animation: "glowPulse 4s ease-in-out infinite" },
+  emailInput: { flex: 1, padding: "16px 20px", fontSize: 15, fontFamily: "'Crimson Pro', Georgia, serif", background: "transparent", border: "none", color: "#E8E2D6", minWidth: 0 },
+  ctaButton: { padding: "16px 28px", fontFamily: "'Cinzel', Georgia, serif", fontSize: 13, fontWeight: 600, letterSpacing: 0.5, background: "linear-gradient(135deg, #C9A84C, #B8963F)", color: "#0C0A13", border: "none", cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.2s" },
+  formNote: { marginTop: 14, fontSize: 13, color: "#6B6175", fontWeight: 300 },
+  successState: { textAlign: "center", padding: "24px 0", animation: "fadeUp 0.6s ease-out" },
+  successTitle: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 22, fontWeight: 600, color: "#C9A84C", marginBottom: 8 },
+  successText: { fontSize: 16, color: "#8A8290", lineHeight: 1.6, fontWeight: 300 },
+  section: { position: "relative", zIndex: 1, padding: "80px 24px", maxWidth: 960, margin: "0 auto" },
+  sectionLabel: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 12, fontWeight: 600, color: "#C9A84C", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12, textAlign: "center" },
+  sectionHeading: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 32, fontWeight: 600, color: "#E8E2D6", textAlign: "center", marginBottom: 48, lineHeight: 1.2 },
+  stepsWrap: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 },
+  stepCard: { padding: "32px 24px", background: "rgba(21,18,31,0.6)", border: "1px solid #2A2440", borderRadius: 14, textAlign: "center" },
+  stepNum: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 11, fontWeight: 700, color: "#C9A84C", letterSpacing: 2, marginBottom: 16, opacity: 0.6 },
+  stepIcon: { fontSize: 32, marginBottom: 16 },
+  stepTitle: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 16, fontWeight: 600, color: "#E8E2D6", marginBottom: 10 },
+  stepDesc: { fontSize: 15, lineHeight: 1.6, color: "#8A8290", fontWeight: 300 },
+  benefitsGrid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 },
+  benefitCard: { padding: "28px 24px", background: "rgba(21,18,31,0.4)", border: "1px solid #2A2440", borderRadius: 14, transition: "all 0.3s", cursor: "default" },
+  benefitIcon: { fontSize: 28, marginBottom: 14 },
+  benefitTitle: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 16, fontWeight: 600, color: "#E8E2D6", marginBottom: 8 },
+  benefitDesc: { fontSize: 15, lineHeight: 1.6, color: "#8A8290", fontWeight: 300 },
+  proofSection: { position: "relative", zIndex: 1, padding: "60px 24px" },
+  proofInner: { maxWidth: 720, margin: "0 auto", padding: "40px 32px", background: "rgba(21,18,31,0.5)", border: "1px solid #2A2440", borderRadius: 16, textAlign: "center" },
+  proofStats: { display: "flex", justifyContent: "center", alignItems: "center", gap: 32, flexWrap: "wrap", marginBottom: 20 },
+  proofStat: { display: "flex", flexDirection: "column", alignItems: "center", gap: 4 },
+  proofNum: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 28, fontWeight: 700 },
+  proofLabel: { fontSize: 13, color: "#6B6175", fontWeight: 300 },
+  proofDivider: { width: 1, height: 40, background: "#2A2440" },
+  proofNote: { fontSize: 14, color: "#8A8290", fontWeight: 300, fontStyle: "italic" },
+  quoteSection: { position: "relative", zIndex: 1, padding: "60px 24px" },
+  quoteInner: { maxWidth: 600, margin: "0 auto", textAlign: "center" },
+  quoteBar: { width: 40, height: 2, background: "#C9A84C", margin: "0 auto 24px", opacity: 0.4 },
+  quoteText: { fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 22, fontStyle: "italic", fontWeight: 300, lineHeight: 1.6, color: "#E8E2D6", marginBottom: 16 },
+  quoteAttrib: { fontSize: 14, color: "#C9A84C", fontWeight: 500, letterSpacing: 0.5 },
+  finalCta: { position: "relative", zIndex: 1, padding: "80px 24px", textAlign: "center" },
+  finalHeading: { fontFamily: "'Cinzel', Georgia, serif", fontSize: 36, fontWeight: 600, color: "#E8E2D6", marginBottom: 12, lineHeight: 1.2 },
+  finalSub: { fontSize: 18, color: "#8A8290", fontWeight: 300, marginBottom: 32 },
+  footer: { borderTop: "1px solid #2A2440", padding: "32px 24px", position: "relative", zIndex: 1 },
+  footerInner: { maxWidth: 960, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 },
+  footerText: { fontSize: 13, color: "#6B6175", fontWeight: 300 },
+  footerLinks: { display: "flex", gap: 20 },
+  footerLink: { fontSize: 13, color: "#6B6175", textDecoration: "none", fontWeight: 300 },
 };
