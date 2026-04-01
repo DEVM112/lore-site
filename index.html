@@ -6,7 +6,6 @@ export default function LoreLanding() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [waitlistCount, setWaitlistCount] = useState(847);
   const [visibleSections, setVisibleSections] = useState(new Set(["hero"]));
   const sectionRefs = useRef({});
 
@@ -35,7 +34,6 @@ export default function LoreLanding() {
     setTimeout(() => {
       setSubmitted(true);
       setIsSubmitting(false);
-      setWaitlistCount((c) => c + 1);
     }, 1200);
   };
 
@@ -163,7 +161,7 @@ export default function LoreLanding() {
         }}>
           <div style={styles.badge}>
             <div style={styles.badgeDot} />
-            Your next chapter begins here
+            Something new is coming
           </div>
 
           <h1 className="hero-heading" style={styles.heroHeading}>
@@ -211,7 +209,7 @@ export default function LoreLanding() {
                   </button>
                 </div>
                 <p style={styles.formNote}>
-                  Join {waitlistCount.toLocaleString()} others on the waitlist · No spam, only quests
+                  No spam, only quests
                 </p>
               </>
             ) : (
@@ -222,7 +220,7 @@ export default function LoreLanding() {
                     <path d="M10 16L14 20L22 12" stroke="#C9A84C" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="24" style={{ animation: "checkDraw 0.6s ease-out forwards" }}/>
                   </svg>
                 </div>
-                <h3 style={styles.successTitle}>Quest accepted, traveler.</h3>
+                <h3 style={styles.successTitle}>You're in.</h3>
                 <p style={styles.successText}>
                   You're on the list. Watch your inbox for your first quest briefing.
                 </p>
@@ -338,24 +336,46 @@ export default function LoreLanding() {
         <div style={styles.proofInner}>
           <div style={styles.proofStats}>
             <div style={styles.proofStat}>
-              <span className="social-proof-num" style={styles.proofNum}>{waitlistCount.toLocaleString()}</span>
-              <span style={styles.proofLabel}>on the waitlist</span>
-            </div>
-            <div style={styles.proofDivider} />
-            <div style={styles.proofStat}>
               <span className="social-proof-num" style={styles.proofNum}>Spring '26</span>
               <span style={styles.proofLabel}>target launch</span>
             </div>
             <div style={styles.proofDivider} />
             <div style={styles.proofStat}>
-              <span className="social-proof-num" style={styles.proofNum}>1,000</span>
-              <span style={styles.proofLabel}>founding member cap</span>
+              <span className="social-proof-num" style={styles.proofNum}>Closing soon</span>
+              <span style={styles.proofLabel}>limited early access</span>
             </div>
           </div>
 
           <p style={styles.proofNote}>
-            Founding member slots are limited. Once the first 1,000 spots fill, the waitlist closes until launch.
+            Early access spots are almost full. Get on the list before we close sign-ups.
           </p>
+
+          {/* Progress Bar */}
+          <div style={{ marginTop: 24 }}>
+            <div style={{
+              width: "100%",
+              height: 8,
+              borderRadius: 100,
+              background: "#1A1525",
+              overflow: "hidden",
+            }}>
+              <div style={{
+                width: "80%",
+                height: "100%",
+                borderRadius: 100,
+                background: "linear-gradient(90deg, #8B7333, #C9A84C, #E8D5A0)",
+                transition: "width 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+              }} />
+            </div>
+            <p style={{
+              marginTop: 10,
+              fontSize: 13,
+              color: "#C9A84C",
+              fontWeight: 500,
+            }}>
+              Waitlist closing soon
+            </p>
+          </div>
         </div>
       </section>
 
@@ -369,9 +389,9 @@ export default function LoreLanding() {
         <div style={styles.quoteInner}>
           <div style={styles.quoteBar} />
           <blockquote style={styles.quoteText}>
-            "Every great story begins with a single step off the familiar path. Your quests are waiting, traveler. The only question is, will you answer?"
+            "Most people talk about doing more with their time. Lore actually gives you a reason to. The only question is, are you in?"
           </blockquote>
-          <p style={styles.quoteAttrib}>The Chronicler, your personal game master</p>
+          <p style={styles.quoteAttrib}>The Lore Team</p>
         </div>
       </section>
 
@@ -382,9 +402,9 @@ export default function LoreLanding() {
         className={`section-reveal ${isVisible("finalcta") ? "visible" : ""}`}
         style={styles.finalCta}
       >
-        <h2 style={styles.finalHeading}>Ready to start your story?</h2>
+        <h2 style={styles.finalHeading}>Ready to make life less boring?</h2>
         <p style={styles.finalSub}>
-          Join the waitlist and be first in line when Lore opens its gates.
+          Join the waitlist and be first in line when Lore launches.
         </p>
 
         {!submitted ? (
@@ -413,7 +433,7 @@ export default function LoreLanding() {
           </div>
         ) : (
           <p style={{ color: "#C9A84C", fontFamily: "'Crimson Pro', Georgia, serif", fontSize: 18 }}>
-            You're already on the list, traveler. Your story is being written.
+            You're already on the list. We'll be in touch soon.
           </p>
         )}
       </section>
