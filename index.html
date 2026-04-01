@@ -166,7 +166,24 @@
   }
 
   /* ── Form ── */
-  .form-wrap { max-width: 480px; margin: 0 auto; }
+  .form-wrap { max-width: 480px; margin: 0 auto; text-align: center; }
+  .cta-btn-large {
+    padding: 18px 48px;
+    font-family: var(--font-display);
+    font-size: 15px; font-weight: 600;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, var(--gold), #B8963F);
+    color: var(--bg); border: none;
+    border-radius: 12px;
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.2s;
+    animation: glowPulse 4s ease-in-out infinite;
+  }
+  .cta-btn-large:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.35);
+  }
+  .cta-btn-large:active { transform: translateY(0); }
   .form-note {
     margin-top: 14px;
     font-size: 13px; color: var(--text-muted); font-weight: 300;
@@ -353,7 +370,7 @@
       <div class="logo-mark">L</div>
       <span class="logo-text">LORE</span>
     </a>
-    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+    <a href="javascript:void(0)" onclick="Tally.openPopup('wMqOGx', { hideTitle: true, width: 400 })" class="nav-cta">Join Waitlist</a>
   </div>
 </nav>
 
@@ -374,7 +391,8 @@
     </p>
 
     <div id="waitlist" class="form-wrap fade-up fade-up-d3">
-      <iframe data-tally-src="https://tally.so/embed/wMqOGx?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="150" frameborder="0" marginheight="0" marginwidth="0" title="Lore Waitlist"></iframe>
+      <button class="cta-btn-large" onclick="Tally.openPopup('wMqOGx', { hideTitle: true, width: 400 })">Accept the Quest</button>
+      <p class="form-note">No spam, only quests</p>
     </div>
   </div>
 </section>
@@ -466,7 +484,7 @@
   <h2 class="final-heading">Ready to make life less boring?</h2>
   <p class="final-sub">Join the waitlist and be first in line when Lore launches.</p>
   <div class="form-wrap">
-    <iframe data-tally-src="https://tally.so/embed/wMqOGx?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="150" frameborder="0" marginheight="0" marginwidth="0" title="Lore Waitlist"></iframe>
+    <button class="cta-btn-large" onclick="Tally.openPopup('wMqOGx', { hideTitle: true, width: 400 })">Join the Waitlist</button>
   </div>
 </section>
 
